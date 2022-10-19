@@ -45,10 +45,10 @@ class HaloXML:
             if (
                 neg
             ):  # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
-                points = [geometry.Point(_getvertices(n, True)[0]) for n in neg]
+                points = [geometry.Point(_getvertices(n, False)[0]) for n in neg]
                 for r in pos:
                     self.regions.append(Region(r, annotation.attrib))
-                    polygon = geometry.Polygon(_getvertices(r, True))
+                    polygon = geometry.Polygon(_getvertices(r, False))
                     for i, point in enumerate(points):
                         if polygon.contains(point):
                             self.regions[-1].add_hole(neg[i])
@@ -131,14 +131,14 @@ class HaloXML:
             f.write(gs.dumps(self.as_geojson(), sort_keys=True))
 
 
-def _getvertices(element: _Element, nowarn: bool = False) -> list[tuple]:
+def _getvertices(element: _Element, warn: bool = True) -> list[tuple]:
     vertices = []
     for e in element.getchildren():
         if e.tag == "Vertices":
             for v in e.getchildren():
                 vertices.append((float(v.attrib["X"]), float(v.attrib["Y"])))
     if vertices[0] != vertices[-1]:
-        if not nowarn:
+        if warn:
             logging.warning(
                 "HaloXML:Region 'Polygon does not close. Will close it now.'"
             )
