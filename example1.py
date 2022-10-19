@@ -14,3 +14,4 @@ for r in hx.regions:
     else:
         r.annatr['Name'] = 'Layer 2'
 hx.save(Path(pth.parent, pth.stem+'_new'))
+hx.to_geojson(Path(pth.parent, pth.stem+'_new'))
