@@ -5,13 +5,15 @@ from pathlib import Path
 from lxml import etree
 from lxml.etree import _Element, _Attrib, _ElementTree
 
+
 class HaloXML:
     """
     Class around the halo .annotations files.
     """
+
     def __init__(self) -> None:
         self.pth = Path()  # type: Path
-        self.tree = etree.Element('root')  # type:_ElementTree
+        self.tree = etree.Element("root")  # type:_ElementTree
         self.regions = []  # type:[Region]
         self.valid = False  # type:bool
 
@@ -70,8 +72,8 @@ class HaloXML:
             new_root.append(anno)
         pth = Path(pth)
         if not pth.suffix:
-            pth = Path(pth.parent, pth.name + '.annotations')
-        with open(pth, 'wb') as f:
+            pth = Path(pth.parent, pth.name + ".annotations")
+        with open(pth, "wb") as f:
             f.write(etree.tostring(new_root))
 
 
@@ -86,5 +88,5 @@ class Region:
         :return: the vertices element
         """
         for e in self.region.getchildren():
-            if e.tag == 'Vertices':
+            if e.tag == "Vertices":
                 return e
