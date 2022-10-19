@@ -19,7 +19,7 @@ class HaloXML:
         self.tree = etree.Element("root")  # type:_ElementTree
         self.regions = []  # type:[Region]
         self.valid = False  # type:bool
-        self.log = logging.getLogger('HaloXML')
+        self.log = logging.getLogger("HaloXML")
 
     def __bool__(self) -> bool:
         return self.valid
@@ -38,11 +38,13 @@ class HaloXML:
             neg = []  # type: [_Element]
             pos = []  # type: [_Element]
             for region in regions:
-                if region.attrib['NegativeROA'] == '1':
+                if region.attrib["NegativeROA"] == "1":
                     neg.append(region)
                 else:
                     pos.append(region)
-            if neg:  # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
+            if (
+                neg
+            ):  # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
                 points = [geometry.Point(_getvertices(n, True)[0]) for n in neg]
                 for r in pos:
                     self.regions.append(Region(r, annotation.attrib))
@@ -134,10 +136,12 @@ def _getvertices(element: _Element, nowarn: bool = False) -> list[tuple]:
     for e in element.getchildren():
         if e.tag == "Vertices":
             for v in e.getchildren():
-                vertices.append((float(v.attrib['X']), float(v.attrib['Y'])))
+                vertices.append((float(v.attrib["X"]), float(v.attrib["Y"])))
     if vertices[0] != vertices[-1]:
         if not nowarn:
-            logging.warning("HaloXML:Region 'Polygon does not close. Will close it now.'")
+            logging.warning(
+                "HaloXML:Region 'Polygon does not close. Will close it now.'"
+            )
         vertices.append(vertices[0])
     return vertices
 
@@ -151,7 +155,7 @@ class Region:
         self.region = region  # type: _Element
         self.holes = []  # type: [_Element]
         self.annatr = copy.deepcopy(annotationattribs)  # type: _Attrib
-        self.log = logging.getLogger('HaloXML:Region')
+        self.log = logging.getLogger("HaloXML:Region")
 
     def add_hole(self, n_element: _Element) -> None:
         """
