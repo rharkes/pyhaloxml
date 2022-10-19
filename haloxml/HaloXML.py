@@ -91,6 +91,8 @@ class HaloXML:
             anno = etree.Element("Annotation", json.loads(annotation))
             for region in annotations[annotation]:
                 anno.append(region.region)
+                for n in region.holes:
+                    anno.append(n)
             new_root.append(anno)
         pth = Path(pth)
         if not pth.suffix:
