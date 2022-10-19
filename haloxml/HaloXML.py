@@ -42,9 +42,9 @@ class HaloXML:
                     neg.append(region)
                 else:
                     pos.append(region)
-            if (
-                neg
-            ):  # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
+            # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
+            if neg:
+                # Take the first point of the negative ROIs
                 points = [geometry.Point(_getvertices(n, False)[0]) for n in neg]
                 for r in pos:
                     self.regions.append(Region(r, annotation.attrib))
