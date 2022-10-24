@@ -157,7 +157,7 @@ class Region:
         self.region = region  # type: _Element
         self.holes = []  # type: [_Element]
         self.annatr = copy.deepcopy(annotationattribs)  # type: _Attrib
-        self.log = logging.getLogger("HaloXML:Region")
+        self.log = logging.getLogger("HaloXML:Region")  # type: logging.Logger
 
     def add_hole(self, n_element: _Element) -> None:
         """

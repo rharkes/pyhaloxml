@@ -6,7 +6,8 @@ The polygon is closed automatically and a warning is given.
 from pathlib import Path
 from haloxml import HaloXML
 
-pth = Path(Path.cwd(), "exampledata", "example_holes.annotations")
+pth = Path(Path.cwd(), "exampledata", "multiple_holes.annotations")
+# pth = Path(Path.cwd(), "exampledata", "example_holes.annotations")
 hx = HaloXML()
 hx.load(pth)
 for i, r in enumerate(hx.regions):
