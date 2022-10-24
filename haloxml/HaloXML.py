@@ -15,7 +15,6 @@ class HaloXML:
     """
 
     def __init__(self) -> None:
-        self.pth = Path()  # type: Path
         self.tree = etree.Element("root")  # type:_ElementTree
         self.regions = []  # type:[Region]
         self.valid = False  # type:bool
@@ -30,7 +29,9 @@ class HaloXML:
         :param pth:
         :return:
         """
-        self.pth = Path(pth)
+        pth = Path(pth)
+        if not pth.exists() or not pth.is_file():
+            raise FileNotFoundError(pth)
         self.tree = etree.parse(pth)
         annotations = self.tree.getroot().getchildren()
         for annotation in annotations:
