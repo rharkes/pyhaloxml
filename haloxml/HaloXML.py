@@ -39,6 +39,14 @@ class HaloXML:
             neg = []  # type: [_Element]
             pos = []  # type: [_Element]
             for region in regions:
+                if region.attrib["Type"] != "Polygon":
+                    print(
+                        f"Warning! Only Polygon regions supported. Skipping type {region.attrib['Type']}."
+                    )
+                    continue
+                if region.attrib["HasEndcaps"] != "0":
+                    print("Warning! Polygon has Endcaps. Skipping...")
+                    continue
                 if region.attrib["NegativeROA"] == "1":
                     neg.append(region)
                 else:
