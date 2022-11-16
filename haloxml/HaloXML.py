@@ -1,12 +1,15 @@
+"""
+HaloXML Class to import the xml files that are outputted by Halo.
+"""
 import copy
 import json
 import logging
 import os
 from pathlib import Path
-import geojson as gs
 from lxml import etree
 from lxml.etree import _Element, _Attrib, _ElementTree
-from shapely import geometry
+from shapely import geometry as sg
+import geojson as gs
 
 
 class HaloXML:
@@ -54,10 +57,10 @@ class HaloXML:
             # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
             if neg:
                 # Take the first point of the negative ROIs
-                points = [geometry.Point(_getvertices(n, False)[0]) for n in neg]
+                points = [sg.Point(_getvertices(n, False)[0]) for n in neg]
                 for r in pos:
                     self.regions.append(Region(r, annotation.attrib))
-                    polygon = geometry.Polygon(_getvertices(r, False))
+                    polygon = sg.Polygon(_getvertices(r, False))
                     for i, point in enumerate(points):
                         if polygon.contains(point):
                             self.regions[-1].add_hole(neg[i])
@@ -129,6 +132,15 @@ class HaloXML:
                 )
         return gs.FeatureCollection(features)
 
+    def as_shapely(self) -> (list[sg.Polygon], list[str]):
+        """
+        Return the HaloXML as a list of shapely geometry collections
+        :return:
+        """
+        names = [x.annatr["Name"] for x in self.regions]
+        polygons = [x.as_shapely() for x in self.regions]
+        return polygons, names
+
     def to_geojson(self, pth: os.PathLike | str) -> None:
         """
         Save regions as geojson
@@ -194,3 +206,10 @@ class Region:
         if not polygon.is_valid:
             self.log.warning("HaloXML:Region 'Polygon is not valid!'")
         return polygon
+
+    def as_shapely(self) -> sg.Polygon:
+        """
+        Return the region as a shapeply polygon
+        :return:
+        """
+        return sg.Polygon(self.getvertices(), [_getvertices(x) for x in self.holes])
