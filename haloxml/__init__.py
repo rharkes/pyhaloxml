@@ -1,3 +1,2 @@
-from .HaloXML import HaloXML
-
-__version__ = "1.1.1"
+from .HaloXML import HaloXML, Layer, Region
+from .version import __version__

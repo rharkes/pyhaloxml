@@ -7,6 +7,5 @@ from haloxml import HaloXML
 pth = Path(Path.cwd(), "exampledata", "multiple_holes.annotations")
 hx = HaloXML()
 hx.load(pth)
-sl, n = hx.as_shapely()
-for i in range(len(sl)):
-    print(f"{n[i]} ; {sl[i].wkt}")
+sl = hx.layers[0].as_shapely()
+print(f"{sl.wkt}")
