@@ -7,3 +7,6 @@ Python code to read/write .annotation files from Halo. Can export as .geojson fo
 [Example 2](https://github.com/rharkes/pyhaloxml/blob/main/examples/example2.py) : Check if annotations have holes in them and save as `.geojson`.
 
 [Example 3](https://github.com/rharkes/pyhaloxml/blob/main/examples/example3.py) : Show the wkt representation of the shapely polygon.
+
+# Installation
+`pip install pyhaloxml`
