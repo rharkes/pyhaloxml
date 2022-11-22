@@ -8,7 +8,6 @@ version = "2.0.3"
 description = "Read and write the annotation files from Halo"
 readme = "README.md"
 authors = [{ name = "Rolf Harkes", email = "r.harkes@nki.nl" }]
-license = { text = "GPLv3+" }
 classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Programming Language :: Python",
