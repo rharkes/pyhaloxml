@@ -4,7 +4,7 @@ One of the polygons does not close. This happens with Halo .annotations files fo
 The polygon is closed automatically and a warning is given.
 """
 from pathlib import Path
-from haloxml import HaloXML
+from pyhaloxml import HaloXML
 
 pth = Path(Path.cwd(), "exampledata", "multiple_holes.annotations")
 # pth = Path(Path.cwd(), "exampledata", "example_holes.annotations")

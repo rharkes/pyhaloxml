@@ -11,8 +11,7 @@ from lxml.etree import _Element, _Attrib, _ElementTree
 from shapely import geometry as sg
 from shapely import affinity as sa
 import geojson as gs
-
-from haloxml.ellipse import ellipse2polygon
+from .ellipse import ellipse2polygon
 
 
 class HaloXML:
@@ -74,6 +73,13 @@ class HaloXML:
         :param pth: path to save the annotations to
         :return:
         """
+        pth = Path(pth)
+        if not pth.suffix:
+            pth = Path(pth.parent, pth.name + ".annotations")
+        with open(pth, "wb") as f:
+            f.write(self.as_raw())
+
+    def as_raw(self) -> bytes:
         new_root = etree.Element("Annotations")
         for layer in self.layers:
             anno = etree.Element("Annotation", layer.todict())
@@ -82,11 +88,7 @@ class HaloXML:
                 for n in region.holes:
                     anno.append(n.region)
             new_root.append(anno)
-        pth = Path(pth)
-        if not pth.suffix:
-            pth = Path(pth.parent, pth.name + ".annotations")
-        with open(pth, "wb") as f:
-            f.write(etree.tostring(new_root))
+        return etree.tostring(new_root)
 
     def as_geojson(self) -> gs.FeatureCollection:
         """
@@ -191,7 +193,7 @@ class Region:
     """
     Halo region.
     Can contian negative Regions with the same layer.
-    Has a variable called region that contains the original element from the haloxml.
+    Has a variable called region that contains the original element from the pyhaloxml.
     """
 
     def __init__(self, region: _Element) -> None:

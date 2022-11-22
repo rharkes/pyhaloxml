@@ -3,7 +3,7 @@ This example opens a datafile and moves all the regions with 5 vertices to Layer
 In this file this moves the rectangles to Layer 1 and the circles to Layer 2.
 """
 from pathlib import Path
-from haloxml import HaloXML, Layer
+from pyhaloxml import HaloXML, Layer
 
 pth = Path(Path.cwd(), "exampledata", "1012132_2690.annotations")
 hx = HaloXML()
