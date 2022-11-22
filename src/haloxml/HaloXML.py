@@ -12,6 +12,8 @@ from shapely import geometry as sg
 from shapely import affinity as sa
 import geojson as gs
 
+from haloxml.ellipse import ellipse2polygon
+
 
 class HaloXML:
     """
@@ -41,7 +43,6 @@ class HaloXML:
         for annotation in annotations:  # go over each layer in the file
             layer = Layer()
             layer.fromattrib(annotation.attrib)
-            self.layers.append(layer)
             regions = annotation.getchildren()[0]
             neg = []  # type: [Region]
             pos = []  # type: [Region]
@@ -55,14 +56,16 @@ class HaloXML:
                 # Take the first point of the negative ROIs
                 points = [sg.Point(n.getpointinregion()) for n in neg]
                 for r in pos:
-                    self.layers[-1].addregion(r)
                     polygon = sg.Polygon(r.getvertices())
                     for i, point in enumerate(points):
                         if polygon.contains(point):
-                            self.layers[-1].regions[-1].add_hole(neg[i])
+                            r.add_hole(neg[i])
+                    layer.addregion(r)
             else:
                 for r in pos:
-                    self.layers[-1].addregion(r)
+                    layer.addregion(r)
+
+            self.layers.append(layer)
         self.valid = True
 
     def save(self, pth: os.PathLike | str) -> None:
@@ -144,9 +147,9 @@ class Layer:
     """
 
     def __init__(self) -> None:
-        self.linecolor = ''  # type:str
-        self.name = ''  # type:str
-        self.visible = ''  # type:str
+        self.linecolor = ""  # type:str
+        self.name = ""  # type:str
+        self.visible = ""  # type:str
         self.regions = []  # type:[Region]
 
     def __str__(self):
@@ -187,7 +190,7 @@ class Layer:
 class Region:
     """
     Halo region.
-    Can contian negative Regions that share the annatr
+    Can contian negative Regions with the same layer.
     Has a variable called region that contains the original element from the haloxml.
     """
 
@@ -237,7 +240,12 @@ class Region:
         if self.type == RegionType.Ruler:
             vertices = _getvertices(self.region)
         if self.type == RegionType.Ellipse:
-            raise NotImplementedError
+            pts = _getvertices(self.region)
+            center = ((pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2)
+            a = (pts[0][0] - pts[1][0]) / 2
+            b = (pts[0][1] - pts[1][1]) / 2
+            e = ellipse2polygon(a, b)
+            vertices = [(x + center[0], y + center[1]) for (x, y) in e]
         return vertices
 
     def getpointinregion(self) -> tuple:
@@ -249,7 +257,9 @@ class Region:
         if self.type in [RegionType.Polygon, RegionType.Rectangle]:
             pointinregion = self.getvertices()[0]
         if self.type == RegionType.Ellipse:
-            pts = _getvertices(self.region)  # corners of the rectangle, return the centerpoint
+            pts = _getvertices(
+                self.region
+            )  # corners of the rectangle, return the centerpoint
             pointinregion = ((pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2)
         return pointinregion
 
@@ -259,11 +269,14 @@ class Region:
         :return:
         """
         vertices = [self.getvertices()]
-        for v in self.holes:
-            vertices.append(v.getvertices())
-        polygon = gs.Polygon(vertices)
-        if not polygon.is_valid:
-            self.log.warning("HaloXML:Region 'Polygon is not valid!'")
+        if self.type == RegionType.Ruler:
+            polygon = gs.LineString(vertices)
+        else:
+            for v in self.holes:
+                vertices.append(v.getvertices())
+            polygon = gs.Polygon(vertices)
+            if not polygon.is_valid:
+                self.log.warning("HaloXML:Region 'Polygon is not valid!'")
         return polygon
 
     def as_shapely(self) -> sg.Polygon:
@@ -271,15 +284,12 @@ class Region:
         Return the region as a shapeply polygon
         :return:
         """
-        polygon = sg.Polygon()
-        if self.type in [RegionType.Polygon, RegionType.Rectangle]:
-            polygon = sg.Polygon(self.getvertices(), [x.getvertices() for x in self.holes])
-        elif self.type == RegionType.Ellipse:
-            pts = _getvertices(self.region)  # corners of the rectangle, return the centerpoint
-            center = ((pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2)
-            a = (pts[0][0] - pts[1][0]) / 2
-            b = (pts[0][1] - pts[1][1]) / 2
-            polygon = shapelyellipse(a, b, 0.0, center)
+        if self.type == RegionType.Ruler:
+            polygon = sg.LineString(self.getvertices())
+        else:
+            polygon = sg.Polygon(
+                self.getvertices(), [x.getvertices() for x in self.holes]
+            )
         return polygon
 
 
@@ -298,7 +308,9 @@ class RegionType(enum.IntEnum):
     Polygon = 3
 
 
-def shapelyellipse(a: float, b: float, r: float = 0.0, c: (float, float) = (0.0, 0.0)) -> sg.Polygon:
+def shapelyellipse(
+    a: float, b: float, r: float = 0.0, c: (float, float) = (0.0, 0.0)
+) -> sg.Polygon:
     """
     Generate a rotated ellipse with major axis a and minor axis b and centered around c
     from ; https://gis.stackexchange.com/questions/243459/drawing-ellipse-with-shapely

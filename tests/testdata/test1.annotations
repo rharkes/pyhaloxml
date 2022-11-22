@@ -1,0 +1,18 @@
+<Annotations>
+  <Annotation LineColor="5634047" Name="Layer 1" Visible="True">
+    <Regions>
+      <Region Type="Polygon" HasEndcaps="0" NegativeROA="0">
+        <Vertices>
+          <V X="10627" Y="68377"/>
+          <V X="10749" Y="68354"/>
+          <V X="10870" Y="68317"/>
+          <V X="10988" Y="68267"/>
+          <V X="11106" Y="68200"/>
+          <V X="11220" Y="68116"/>
+          <V X="10627" Y="68377"/>
+        </Vertices>
+        <Comments/>
+      </Region>
+    </Regions>
+  </Annotation>
+</Annotations>
