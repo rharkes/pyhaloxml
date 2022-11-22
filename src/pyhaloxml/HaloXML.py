@@ -6,12 +6,15 @@ import json
 import logging
 import os
 from pathlib import Path
+
+import numpy as np
 from lxml import etree
 from lxml.etree import _Element, _Attrib, _ElementTree
 from shapely import geometry as sg
 from shapely import affinity as sa
 import geojson as gs
 from .ellipse import ellipse2polygon
+from .inpoly import parallelpointinpolygon
 
 
 class HaloXML:
@@ -51,21 +54,22 @@ class HaloXML:
                 else:
                     pos.append(Region(region))
             # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
+            logging.info(f"Found {len(pos)} positive regions and {len(neg)} negative regions.")
             if neg:
-                # Take the first point of the negative ROIs
-                points = [sg.Point(n.getpointinregion()) for n in neg]
-                for r in pos:
-                    polygon = sg.Polygon(r.getvertices())
-                    for i, point in enumerate(points):
-                        if polygon.contains(point):
-                            r.add_hole(neg[i])
-                    layer.addregion(r)
+                nppoints = np.array([n.getpointinregion() for n in neg])
+                for pos_region in pos:
+                    nppolygon = np.array(pos_region.getvertices())
+                    point_in_poly = np.flatnonzero(parallelpointinpolygon(nppoints, nppolygon))
+                    for i in range(point_in_poly.size):
+                        pos_region.add_hole(neg[point_in_poly[i]])
+                    layer.addregion(pos_region)
             else:
                 for r in pos:
                     layer.addregion(r)
 
             self.layers.append(layer)
         self.valid = True
+        logging.info(f"Finished loading {pth.stem}")
 
     def save(self, pth: os.PathLike | str) -> None:
         """
@@ -131,6 +135,13 @@ def _getvertices(element: _Element) -> list[tuple]:
             for v in e.getchildren():
                 vertices.append((float(v.attrib["X"]), float(v.attrib["Y"])))
     return vertices
+
+
+def _getvertex(element: _Element) -> tuple:
+    for e in element.getchildren():
+        if e.tag == "Vertices":
+            for v in e.getchildren():
+                return float(v.attrib["X"]), float(v.attrib["Y"])
 
 
 def _closepolygon(vertices: list[tuple], warn: bool = True) -> list[tuple]:
@@ -257,7 +268,7 @@ class Region:
         """
         pointinregion = (None, None)
         if self.type in [RegionType.Polygon, RegionType.Rectangle]:
-            pointinregion = self.getvertices()[0]
+            pointinregion = _getvertex(self.region)
         if self.type == RegionType.Ellipse:
             pts = _getvertices(
                 self.region
@@ -311,7 +322,7 @@ class RegionType(enum.IntEnum):
 
 
 def shapelyellipse(
-    a: float, b: float, r: float = 0.0, c: (float, float) = (0.0, 0.0)
+        a: float, b: float, r: float = 0.0, c: (float, float) = (0.0, 0.0)
 ) -> sg.Polygon:
     """
     Generate a rotated ellipse with major axis a and minor axis b and centered around c
