@@ -1,1 +1,2 @@
 flit_core
+pyhaloxml
