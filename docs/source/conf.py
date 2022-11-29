@@ -1,9 +1,6 @@
-import os
-import sys
 # Configuration file for the Sphinx documentation builder.
 
 # -- Project information
-sys.path.append(os.path.abspath('../..'))
 project = 'pyhaloxml'
 copyright = '2022, R.Harkes'
 author = 'R.Harkes'
