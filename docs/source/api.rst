@@ -1,8 +1,8 @@
 API
 ===
 
-.. autosummary::
-   :toctree: generated
+Generated api documentation
+---------------------------
 
 .. automodule::  pyhaloxml.HaloXML
     :members:
