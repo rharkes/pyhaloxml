@@ -4,4 +4,5 @@ API
 .. autosummary::
    :toctree: generated
 
-   pyhaloxml
+.. automodule::  pyhaloxml.HaloXML
+    :members:
