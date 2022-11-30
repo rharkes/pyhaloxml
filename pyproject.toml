@@ -45,4 +45,8 @@ push = false
 "src/pyhaloxml/version.py" = [
     "{version}"
 ]
+"docs/source/conf.py" = [
+    'release = "{version}"',
+    'version = "{version}"'
+]
 
