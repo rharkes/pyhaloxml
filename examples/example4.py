@@ -12,7 +12,7 @@ pth = Path(Path.cwd(), "exampledata", "multiple_holes_new.geojson")
 with open(pth, 'r') as f:
     geo_data = gs.load(f)
 
-# we want to have a geojson.geometry.Polygon:
+# we can get a list of polygons from the geojson.
 coordinates = geo_data['features'][0]['geometry']['coordinates']
 reg = region_from_coordinates(coordinates)
 layer = Layer()
