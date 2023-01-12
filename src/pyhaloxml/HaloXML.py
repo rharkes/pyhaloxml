@@ -93,10 +93,12 @@ class HaloXML:
         new_root = etree.Element("Annotations")
         for layer in self.layers:
             anno = etree.Element("Annotation", layer.todict())
+            regions = etree.Element("Regions")
             for region in layer.regions:
-                anno.append(region.region)
+                regions.append(region.region)
                 for n in region.holes:
-                    anno.append(n.region)
+                    regions.append(n.region)
+            anno.append(regions)
             new_root.append(anno)
         return etree.tostring(new_root)
 
