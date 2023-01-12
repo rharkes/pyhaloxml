@@ -5,7 +5,7 @@ In this file this moves the rectangles to Layer 1 and the circles to Layer 2.
 from pathlib import Path
 from pyhaloxml import HaloXML, Layer
 
-pth = Path(Path.cwd(), "exampledata", "1012132_2690.annotations")
+pth = Path(Path.cwd(), "exampledata", "example.annotations")
 hx = HaloXML()
 hx.load(pth)
 # create two empty layers, here with the same names/properties as the original layers
