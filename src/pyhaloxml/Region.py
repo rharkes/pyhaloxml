@@ -2,7 +2,9 @@
 Region.py
 """
 import logging
-from lxml.etree import _Element
+from numbers import Real
+
+from lxml.etree import _Element, Element
 from shapely import geometry as sg
 import geojson as gs
 from pyhaloxml.ellipse import ellipse2polygon
@@ -113,3 +115,26 @@ class Region:
                 self.getvertices(), [x.getvertices() for x in self.holes]
             )
         return polygon
+
+
+def region_from_coordinates(coords: list[list[list[Real, Real]]]) -> Region:
+    """
+    Creates a HaloXML Region from coordinates. It must be a list of lists of coordinates.
+    The first list is the outer polygon, the next lists are the polygonal holes and must be contained in the first polygon.
+    :param coords:
+    :return:
+    """
+    region = Element(
+        "Region", {"Type": "Polygon", "HasEndcaps": "0", "NegativeROA": "0"}
+    )
+    for v in coords[0]:
+        region.append(Element("V", {"X": str(int(v[0])), "Y": str(int(v[1]))}))
+    reg = Region(region)
+    for i in range(1, len(coords)):
+        region = Element(
+            "Region", {"Type": "Polygon", "HasEndcaps": "0", "NegativeROA": "0"}
+        )
+        for v in coords[i]:
+            region.append(Element("V", {"X": str(int(v[0])), "Y": str(int(v[1]))}))
+        reg.add_hole(Region(region))
+    return reg
