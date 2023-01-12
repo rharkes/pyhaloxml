@@ -24,7 +24,7 @@ class RegionType(enum.IntEnum):
     Polygon = 3
 
 
-def _getvertices(element: _Element) -> list[tuple]:
+def getvertices(element: _Element) -> list[tuple]:
     vertices = []
     for e in element.getchildren():
         if e.tag == "Vertices":
@@ -33,14 +33,14 @@ def _getvertices(element: _Element) -> list[tuple]:
     return vertices
 
 
-def _getvertex(element: _Element) -> tuple:
+def getvertex(element: _Element) -> tuple:
     for e in element.getchildren():
         if e.tag == "Vertices":
             for v in e.getchildren():
                 return float(v.attrib["X"]), float(v.attrib["Y"])
 
 
-def _closepolygon(vertices: list[tuple], warn: bool = True) -> list[tuple]:
+def closepolygon(vertices: list[tuple], warn: bool = True) -> list[tuple]:
     if vertices[0] != vertices[-1]:
         if warn:
             logging.warning(

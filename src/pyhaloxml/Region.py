@@ -6,7 +6,7 @@ from lxml.etree import _Element
 from shapely import geometry as sg
 import geojson as gs
 from pyhaloxml.ellipse import ellipse2polygon
-from pyhaloxml.misc import RegionType, _getvertices, _closepolygon, _getvertex
+from pyhaloxml.misc import RegionType, getvertices, closepolygon, getvertex
 
 
 class Region:
@@ -47,11 +47,11 @@ class Region:
         vertices = [(None, None)]
         if self.type == RegionType.Polygon:
             if self.hasendcaps:
-                vertices = _getvertices(self.region)
+                vertices = getvertices(self.region)
             else:
-                vertices = _closepolygon(_getvertices(self.region), warn=True)
+                vertices = closepolygon(getvertices(self.region), warn=True)
         if self.type == RegionType.Rectangle:
-            pts = _getvertices(self.region)  # corners of the rectangle
+            pts = getvertices(self.region)  # corners of the rectangle
             vertices = [
                 pts[0],
                 (pts[0][0], pts[1][1]),
@@ -60,9 +60,9 @@ class Region:
                 pts[0],
             ]
         if self.type == RegionType.Ruler:
-            vertices = _getvertices(self.region)
+            vertices = getvertices(self.region)
         if self.type == RegionType.Ellipse:
-            pts = _getvertices(self.region)
+            pts = getvertices(self.region)
             center = ((pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2)
             a = (pts[0][0] - pts[1][0]) / 2
             b = (pts[0][1] - pts[1][1]) / 2
@@ -77,9 +77,9 @@ class Region:
         """
         pointinregion = (None, None)
         if self.type in [RegionType.Polygon, RegionType.Rectangle]:
-            pointinregion = _getvertex(self.region)
+            pointinregion = getvertex(self.region)
         if self.type == RegionType.Ellipse:
-            pts = _getvertices(
+            pts = getvertices(
                 self.region
             )  # corners of the rectangle, return the centerpoint
             pointinregion = ((pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2)
