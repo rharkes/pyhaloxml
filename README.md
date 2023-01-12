@@ -8,7 +8,7 @@ Python code to read/write .annotation files from Halo. Can export as .geojson fo
 
 [Example 3](https://github.com/rharkes/pyhaloxml/blob/main/examples/example3.py) : Show the wkt representation of the shapely polygon.
 
-[Example 4](https://github.com/rharkes/pyhaloxml/blob/main/examples/example4) : Create a .annotation file from coordinates.
+[Example 4](https://github.com/rharkes/pyhaloxml/blob/main/examples/example4.py) : Create a .annotation file from coordinates.
 
 # Installation
 `pip install pyhaloxml`
