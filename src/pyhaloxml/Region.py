@@ -134,7 +134,7 @@ def region_from_coordinates(coords: list[list[list[Real, Real]]]) -> Region:
     reg = Region(region)
     for i in range(1, len(coords)):
         region = Element(
-            "Region", {"Type": "Polygon", "HasEndcaps": "0", "NegativeROA": "0"}
+            "Region", {"Type": "Polygon", "HasEndcaps": "0", "NegativeROA": "1"}
         )
         vertices = Element("Vertices")
         for v in coords[i]:
