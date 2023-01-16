@@ -3,10 +3,37 @@ File with some basic classes and functions
 """
 import enum
 import logging
+from dataclasses import dataclass
 
 import shapely.geometry as sg
 import shapely.affinity as sa
 from lxml.etree import _Element
+
+
+class Color:
+    """
+    Class for keeping color rgb information
+    """
+    def __init__(self):
+        self.rgb = (0).to_bytes(length=3, byteorder='little')  # type:bytes
+        self.log = logging.getLogger("HaloXML-Color")
+
+    def __str__(self) -> str:
+        return hex(int.from_bytes(self.rgb, byteorder='little'))
+
+    def getrgb(self) -> list[int, int, int]:
+        return [int(x) for x in self.rgb]
+
+    def setrgb(self, r: int, g: int, b: int) -> None:
+        if any([x > 255 for x in [r, g, b]]):
+            self.log.error("Color should be <255 for each color")
+        self.rgb = (r + g * 2 ** 8 + b * 2 ** 16).to_bytes(length=3, byteorder='little')
+
+    def getlinecolor(self) -> str:
+        return str(int.from_bytes(self.rgb, byteorder='little'))
+
+    def setlinecolor(self, color: str) -> None:
+        self.rgb = int(color).to_bytes(length=3, byteorder='little')
 
 
 class RegionType(enum.IntEnum):
@@ -51,7 +78,7 @@ def closepolygon(vertices: list[tuple], warn: bool = True) -> list[tuple]:
 
 
 def shapelyellipse(
-    a: float, b: float, r: float = 0.0, c: (float, float) = (0.0, 0.0)
+        a: float, b: float, r: float = 0.0, c: (float, float) = (0.0, 0.0)
 ) -> sg.Polygon:
     """
     Generate a rotated ellipse with major axis a and minor axis b and centered around c

@@ -2,9 +2,12 @@
 Layer.py
 """
 import json
+import logging
+
 from lxml.etree import _Attrib
 from shapely import geometry as sg
 from pyhaloxml.Region import Region
+from pyhaloxml.misc import Color
 
 
 class Layer:
@@ -13,10 +16,11 @@ class Layer:
     """
 
     def __init__(self) -> None:
-        self.linecolor = ""  # type:str
+        self.linecolor = Color()  # type:Color
         self.name = ""  # type:str
-        self.visible = ""  # type:str
+        self.visible = "True"  # type:str
         self.regions = []  # type:[Region]
+        self.log = logging.getLogger("HaloXML-Layer")
 
     def __str__(self) -> str:
         return self.tojson()
@@ -27,7 +31,7 @@ class Layer:
 
         :param annotationattribs: lxml attribute with information about the layer
         """
-        self.linecolor = annotationattribs["LineColor"]
+        self.linecolor.setlinecolor(annotationattribs["LineColor"])
         self.name = annotationattribs["Name"]
         self.visible = annotationattribs["Visible"]
 
@@ -37,7 +41,7 @@ class Layer:
 
         :param dinfo: dictionary with LineColor, Name and Visibility
         """
-        self.linecolor = dinfo["LineColor"]
+        self.linecolor.setlinecolor(dinfo["LineColor"])
         self.name = dinfo["Name"]
         self.visible = dinfo["Visible"]
 
@@ -54,7 +58,7 @@ class Layer:
         Dictonary representation of the layer.
         :return:
         """
-        return {"LineColor": self.linecolor, "Name": self.name, "Visible": self.visible}
+        return {"LineColor": self.linecolor.getlinecolor(), "Name": self.name, "Visible": self.visible}
 
     def addregion(self, region: Region) -> None:
         """

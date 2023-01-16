@@ -127,14 +127,18 @@ def region_from_coordinates(coords: list[list[list[Real, Real]]]) -> Region:
     region = Element(
         "Region", {"Type": "Polygon", "HasEndcaps": "0", "NegativeROA": "0"}
     )
+    vertices = Element("Vertices")
     for v in coords[0]:
-        region.append(Element("V", {"X": str(int(v[0])), "Y": str(int(v[1]))}))
+        vertices.append(Element("V", {"X": str(int(v[0])), "Y": str(int(v[1]))}))
+    region.append(vertices)
     reg = Region(region)
     for i in range(1, len(coords)):
         region = Element(
             "Region", {"Type": "Polygon", "HasEndcaps": "0", "NegativeROA": "0"}
         )
+        vertices = Element("Vertices")
         for v in coords[i]:
-            region.append(Element("V", {"X": str(int(v[0])), "Y": str(int(v[1]))}))
+            vertices.append(Element("V", {"X": str(int(v[0])), "Y": str(int(v[1]))}))
+        region.append(vertices)
         reg.add_hole(Region(region))
     return reg

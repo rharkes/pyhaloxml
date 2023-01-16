@@ -19,7 +19,7 @@ def wkt():
 
 @pytest.fixture
 def geojson():
-    return '{"features": [{"geometry": {"coordinates": [[[10627.0, 68377.0], [10749.0, 68354.0], [10870.0, 68317.0], [10988.0, 68267.0], [11106.0, 68200.0], [11220.0, 68116.0], [10627.0, 68377.0]]], "type": "Polygon"}, "properties": {"classification": {"colorRGB": 5634047, "name": "Layer 1"}, "isLocked": false, "object_type": "annotation"}, "type": "Feature"}], "type": "FeatureCollection"}'
+    return '{"features": [{"geometry": {"coordinates": [[[10627.0, 68377.0], [10749.0, 68354.0], [10870.0, 68317.0], [10988.0, 68267.0], [11106.0, 68200.0], [11220.0, 68116.0], [10627.0, 68377.0]]], "type": "Polygon"}, "properties": {"classification": {"colorRGB": [255, 247, 85], "name": "Layer 1"}, "isLocked": false, "object_type": "annotation"}, "type": "Feature"}], "type": "FeatureCollection"}'
 
 def test_nr_layers(file):
     hx = HaloXML()

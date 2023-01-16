@@ -12,6 +12,7 @@ import geojson as gs
 from .Layer import Layer
 from .Region import Region
 from .inpoly import parallelpointinpolygon
+from .misc import RegionType
 
 
 class HaloXML:
@@ -114,14 +115,27 @@ class HaloXML:
                 "object_type": "annotation",
                 "classification": {
                     "name": layer.name,
-                    "colorRGB": int(layer.linecolor),
+                    "colorRGB": layer.linecolor.getrgb(),
                 },
                 "isLocked": False,
             }
-            for region in layer.regions:
+            if len(layer.regions) == 1:
+                geometry = layer.regions[0].as_geojson()
                 features.append(
-                    gs.Feature(geometry=region.as_geojson(), properties=props)
+                    gs.Feature(geometry=geometry, properties=props)
                 )
+            else:  # try to put them in a MultiPolygon
+                if any([x.type == RegionType.Ruler for x in layer.regions]):
+                    for region in layer.regions:
+                        features.append(
+                            gs.Feature(geometry=region.as_geojson(), properties=props)
+                        )
+                else:
+                    geometry = gs.MultiPolygon([x.as_geojson()["coordinates"] for x in layer.regions])
+                    features.append(
+                        gs.Feature(geometry=geometry, properties=props)
+                    )
+
         return gs.FeatureCollection(features)
 
     def to_geojson(self, pth: os.PathLike | str) -> None:
