@@ -21,9 +21,10 @@ class Color:
         return [int(x) for x in self.rgb]
 
     def setrgb(self, r: int, g: int, b: int) -> None:
-        if any([x > 255 for x in [r, g, b]]):
-            self.log.error("Color should be <255 for each color")
-        self.rgb = (r + g * 2 ** 8 + b * 2 ** 16).to_bytes(length=3, byteorder='little')
+        if all([x < 255 for x in [r, g, b]]):
+            self.rgb = (r + g * 2 ** 8 + b * 2 ** 16).to_bytes(length=3, byteorder='little')
+            return
+        self.log.error("Color should be <255 for each color")
 
     def getlinecolor(self) -> str:
         return str(int.from_bytes(self.rgb, byteorder='little'))
