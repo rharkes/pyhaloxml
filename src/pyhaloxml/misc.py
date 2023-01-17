@@ -3,10 +3,6 @@ File with some basic classes and functions
 """
 import enum
 import logging
-from dataclasses import dataclass
-
-import shapely.geometry as sg
-import shapely.affinity as sa
 from lxml.etree import _Element
 
 
@@ -76,19 +72,3 @@ def closepolygon(vertices: list[tuple], warn: bool = True) -> list[tuple]:
         vertices.append(vertices[0])
     return vertices
 
-
-def shapelyellipse(
-        a: float, b: float, r: float = 0.0, c: (float, float) = (0.0, 0.0)
-) -> sg.Polygon:
-    """
-    Generate a rotated ellipse with major axis a and minor axis b and centered around c
-    from ; https://gis.stackexchange.com/questions/243459/drawing-ellipse-with-shapely
-    :param c: center
-    :param a: major axis
-    :param b: minor axis
-    :param r: angle
-    :return:
-    """
-    circ = sg.Point(c).buffer(1.0)  # circle
-    ell = sa.scale(circ, a, b)
-    return sa.rotate(ell, r)

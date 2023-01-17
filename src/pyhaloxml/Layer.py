@@ -5,7 +5,6 @@ import json
 import logging
 
 from lxml.etree import _Attrib
-from shapely import geometry as sg
 from pyhaloxml.Region import Region
 from pyhaloxml.misc import Color
 
@@ -67,12 +66,3 @@ class Layer:
         :param region:
         """
         self.regions.append(region)
-
-    def as_shapely(self) -> sg.MultiPolygon:
-        """
-        Return the layer as shaply multipolygon
-
-        :return: A shapely multipolygon contain all the regions in this layer.
-        """
-        polygons = [x.as_shapely() for x in self.regions]
-        return sg.MultiPolygon(polygons)

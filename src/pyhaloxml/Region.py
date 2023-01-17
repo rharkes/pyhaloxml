@@ -3,9 +3,7 @@ Region.py
 """
 import logging
 from numbers import Real
-
 from lxml.etree import _Element, Element
-from shapely import geometry as sg
 import geojson as gs
 from pyhaloxml.ellipse import ellipse2polygon
 from pyhaloxml.misc import RegionType, getvertices, closepolygon, getvertex
@@ -101,19 +99,6 @@ class Region:
             polygon = gs.Polygon(vertices)
             if not polygon.is_valid:
                 self.log.warning("HaloXML:Region 'Polygon is not valid!'")
-        return polygon
-
-    def as_shapely(self) -> sg.Polygon:
-        """
-        Return the region as a shapeply polygon
-        :return:
-        """
-        if self.type == RegionType.Ruler:
-            polygon = sg.LineString(self.getvertices())
-        else:
-            polygon = sg.Polygon(
-                self.getvertices(), [x.getvertices() for x in self.holes]
-            )
         return polygon
 
 
