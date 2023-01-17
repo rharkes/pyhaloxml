@@ -4,14 +4,15 @@ HaloXML Class to import the xml files that are outputted by Halo.
 import logging
 import os
 from pathlib import Path
-import numpy as np
+from uuid import uuid4
+
 from lxml import etree
 from lxml.etree import _ElementTree
 import geojson as gs
 
 from .Layer import Layer
 from .Region import Region
-from .inpoly import parallelpointinpolygon
+from .inpoly import points_in_polygons
 from .misc import RegionType
 
 
@@ -56,15 +57,17 @@ class HaloXML:
                 f"Found {len(pos)} positive regions and {len(neg)} negative regions."
             )
             if neg:
-                nppoints = np.array([n.getpointinregion() for n in neg])
-                for pos_region in pos:
-                    nppolygon = np.array(pos_region.getvertices())
-                    point_in_poly = np.flatnonzero(
-                        parallelpointinpolygon(nppoints, nppolygon)
-                    )
-                    for i in range(point_in_poly.size):
-                        pos_region.add_hole(neg[point_in_poly[i]])
-                    layer.addregion(pos_region)
+                neg_points = [n.getpointinregion() for n in neg]
+                pos_polygons = [p.getvertices() for p in pos]
+                pos_idxs = points_in_polygons(
+                    neg_points, pos_polygons
+                )  # locate the positive polygon that belongs to each negative polygon
+                for neg_idx, pos_idx in enumerate(
+                    pos_idxs
+                ):  # add the negative as hole to the apropriate positive
+                    pos[pos_idx].add_hole(neg[neg_idx])
+                for p in pos:
+                    layer.addregion(p)
             else:
                 for r in pos:
                     layer.addregion(r)
@@ -112,29 +115,28 @@ class HaloXML:
         features = []
         for layer in self.layers:
             props = {
-                "object_type": "annotation",
+                "objectType": "annotation",
+                "name": layer.name,
                 "classification": {
                     "name": layer.name,
-                    "colorRGB": layer.linecolor.getrgb(),
+                    "color": layer.linecolor.getrgb(),
                 },
                 "isLocked": False,
             }
             if len(layer.regions) == 1:
                 geometry = layer.regions[0].as_geojson()
-                features.append(
-                    gs.Feature(geometry=geometry, properties=props)
-                )
+                features.append(gs.Feature(geometry=geometry, properties=props, id=str(uuid4())))
             else:  # try to put them in a MultiPolygon
                 if any([x.type == RegionType.Ruler for x in layer.regions]):
                     for region in layer.regions:
                         features.append(
-                            gs.Feature(geometry=region.as_geojson(), properties=props)
+                            gs.Feature(geometry=region.as_geojson(), properties=props, id=str(uuid4()))
                         )
                 else:
-                    geometry = gs.MultiPolygon([x.as_geojson()["coordinates"] for x in layer.regions])
-                    features.append(
-                        gs.Feature(geometry=geometry, properties=props)
+                    geometry = gs.MultiPolygon(
+                        [x.as_geojson()["coordinates"] for x in layer.regions]
                     )
+                    features.append(gs.Feature(geometry=geometry, properties=props, id=str(uuid4())))
 
         return gs.FeatureCollection(features)
 

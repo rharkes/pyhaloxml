@@ -1,9 +1,9 @@
 """
 Test of inpoly.py
 """
-import numpy as np
 import pytest as pytest
-from pyhaloxml.inpoly import parallelpointinpolygon
+
+from pyhaloxml.inpoly import points_in_polygons
 
 
 @pytest.fixture
@@ -24,12 +24,5 @@ def points():
     return [(41025.0, 15025.0), (41022, 15037.0), (49525.0, 11396.0)]
 
 
-def test_pointinpolygon(polygons, points):
-    assert all(parallelpointinpolygon(np.array(points), np.array(polygons[0])) == np.array([True, True, False]))
-    assert all(parallelpointinpolygon(np.array(points), np.array(polygons[1])) == np.array([False, False, False]))
-    assert all(parallelpointinpolygon(np.array(points), np.array(polygons[2])) == np.array([False, False, True]))
-    assert all(parallelpointinpolygon(np.array(points), np.array(polygons[3])) == np.array([False, False, False]))
-
-
-# def test_pointinpolygons(polygons, points):
-#     assert pointsinpolygons(points, polygons) == [0, 0, 2]
+def test_pointinpolygons(polygons, points):
+    assert points_in_polygons(points, polygons) == [0, 0, 2]
