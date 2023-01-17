@@ -7,16 +7,31 @@ from pyhaloxml.Region import region_from_coordinates
 from pyhaloxml import Layer, HaloXML
 import geojson as gs
 
-pth = Path(Path.cwd(), "exampledata", "multiple_holes_new.geojson")
+pth = Path(Path.cwd(), "exampledata", "qupath_test.geojson")
 
 with open(pth, 'r') as f:
     geo_data = gs.load(f)
 
-# we can get a list of polygons from the geojson.
-coordinates = geo_data['features'][0]['geometry']['coordinates']
-reg = region_from_coordinates(coordinates)
-layer = Layer()
-layer.addregion(reg)
 hx = HaloXML()
-hx.layers = [layer]
-hx.save(Path(pth.parent, "geojson_to_annotation"))
+for feature in geo_data["features"]:
+    layer = Layer()
+    if feature["geometry"]["type"] == "MultiPolygon":
+        print("multi")
+        layer.name = feature["properties"]["classification"]["name"]
+        layer.linecolor.setrgb(*feature["properties"]["classification"]["color"])
+        for coordinates in feature["geometry"]["coordinates"]:
+            reg = region_from_coordinates(coordinates)
+            layer.addregion(reg)
+    else:
+        print("single")
+        layer.name = feature["properties"]["classification"]["name"]
+        layer.linecolor.setrgb(*feature["properties"]["classification"]["color"])
+        coordinates = feature["geometry"]["coordinates"]
+        reg = region_from_coordinates(coordinates)
+        layer.addregion(reg)
+    hx.layers.append(layer)
+hx.save(Path(pth.parent, "qupath_test"))
+# --- #
+hx = HaloXML()
+hx.load(Path(pth.parent, "qupath_test.annotations"))
+hx.to_geojson(Path(pth.parent, "qupath_test_repl"))
