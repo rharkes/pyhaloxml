@@ -1,5 +1,5 @@
 from array import array
-from pyhaloxml.c_inpoly import pointinpoly
+from pyhaloxml.cython.c_inpoly import pointinpoly
 
 
 def points_in_polygons(
