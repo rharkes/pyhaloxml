@@ -3,9 +3,10 @@ This example opens a datafile and prints the wkt representation of the shapely p
 """
 from pathlib import Path
 from pyhaloxml import HaloXML
+from pyhaloxml.shapely import layer_to_shapely
 
 pth = Path(Path.cwd(), "exampledata", "multiple_holes.annotations")
 hx = HaloXML()
 hx.load(pth)
-sl = hx.layers[0].as_shapely()
+sl = layer_to_shapely(hx.layers[0])
 print(f"{sl.wkt}")
