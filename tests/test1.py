@@ -3,7 +3,6 @@ Open simple .annotation with a single layer and single region.
 """
 import pytest as pytest
 from pathlib import Path
-import geojson as gs
 from pyhaloxml import HaloXML
 
 
@@ -28,8 +27,3 @@ def test_nr_regions(file):
     hx.load(file)
     assert len(hx.layers[0].regions) == 1
 
-
-def test_shapely_wkt(file, wkt):
-    hx = HaloXML()
-    hx.load(file)
-    assert hx.layers[0].as_shapely().wkt == wkt

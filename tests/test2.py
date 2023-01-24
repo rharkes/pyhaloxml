@@ -3,7 +3,7 @@ Test of inpoly.py
 """
 import pytest as pytest
 
-from pyhaloxml.inpoly import points_in_polygons
+from pyhaloxml.misc import points_in_polygons
 
 
 @pytest.fixture

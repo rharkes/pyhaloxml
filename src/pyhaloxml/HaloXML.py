@@ -12,8 +12,7 @@ import geojson as gs
 
 from .Layer import Layer
 from .Region import Region
-from .inpoly import points_in_polygons
-from .misc import RegionType
+from .misc import RegionType, points_in_polygons
 
 
 class HaloXML:

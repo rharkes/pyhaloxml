@@ -1,7 +1,7 @@
 # distutils: language=c++
 from libcpp cimport bool
 
-def pointinpoly(float[:] point, float[:] polygon):
+def c_pointinpoly(float[:] point, float[:] polygon):
     """
     Determines if a point is inside a polgyon
     :param point: float array of x,y

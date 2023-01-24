@@ -17,12 +17,14 @@ keywords = ["Halo", "reader", "annotation"]
 dependencies = [
     "lxml >= 4.9",
     "geojson>=2.5",
+    "numba",
+    "numpy",
 ]
 requires-python = ">=3.8"
 
 [project.optional-dependencies]
 shapely = ["shapely"]
-dev = ["black", "bumpver", "pytest", "setuptools", "build", "twine", "cython"]
+dev = ["black", "bumpver", "pytest", "setuptools", "build", "twine"]
 
 [project.urls]
 Homepage = "https://github.com/rharkes/pyhaloxml"
