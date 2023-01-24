@@ -6,8 +6,8 @@ project = "pyhaloxml"
 copyright = "2022, R.Harkes"
 author = "R.Harkes"
 
-release = "2.4.1"
-version = "2.4.1"
+release = "2.4.2"
+version = "2.4.2"
 
 # -- General configuration
 extensions = [
