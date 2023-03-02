@@ -17,9 +17,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python -m setup.py build_ext --inplace   
           python -m pip install --upgrade pip
-          pip install pytest lxml geojson
+          pip install pytest lxml geojson Cython
+          python -m setup.py build_ext --inplace
       - name: Test with pytest
         run: |
           pytest
