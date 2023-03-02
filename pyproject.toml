@@ -48,3 +48,11 @@ push = false
     'version = "{version}"'
 ]
 
+[tool.black]
+line-length = 88
+target-version = ['py39', 'py310', 'py311']
+
+[tool.pytest.ini_options]
+pythonpath = [
+  './src'
+]
