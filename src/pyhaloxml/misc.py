@@ -6,6 +6,7 @@ import logging
 from lxml.etree import _Element
 from pyhaloxml.cython.g_pointinpoly import point_in_polygon
 
+
 def points_in_polygons(
     points: list[(float, float)], polygons: list[list[(float, float)]]
 ) -> list[int]:
