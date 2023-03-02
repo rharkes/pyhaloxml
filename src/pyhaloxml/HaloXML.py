@@ -4,6 +4,7 @@ HaloXML Class to import the xml files that are outputted by Halo.
 import logging
 import os
 from pathlib import Path
+from typing import Union
 from uuid import uuid4
 
 from lxml import etree
@@ -29,7 +30,7 @@ class HaloXML:
     def __bool__(self) -> bool:
         return self.valid
 
-    def load(self, pth: os.PathLike | str) -> None:
+    def load(self, pth: Union[str, os.PathLike]) -> None:
         """
         Load .annotations file
 
@@ -75,7 +76,7 @@ class HaloXML:
         self.valid = True
         logging.info(f"Finished loading {pth.stem}")
 
-    def save(self, pth: os.PathLike | str) -> None:
+    def save(self, pth: Union[str, os.PathLike]) -> None:
         """
         Save the data as .annotation file.
 
@@ -124,22 +125,30 @@ class HaloXML:
             }
             if len(layer.regions) == 1:
                 geometry = layer.regions[0].as_geojson()
-                features.append(gs.Feature(geometry=geometry, properties=props, id=str(uuid4())))
+                features.append(
+                    gs.Feature(geometry=geometry, properties=props, id=str(uuid4()))
+                )
             else:  # try to put them in a MultiPolygon
                 if any([x.type == RegionType.Ruler for x in layer.regions]):
                     for region in layer.regions:
                         features.append(
-                            gs.Feature(geometry=region.as_geojson(), properties=props, id=str(uuid4()))
+                            gs.Feature(
+                                geometry=region.as_geojson(),
+                                properties=props,
+                                id=str(uuid4()),
+                            )
                         )
                 else:
                     geometry = gs.MultiPolygon(
                         [x.as_geojson()["coordinates"] for x in layer.regions]
                     )
-                    features.append(gs.Feature(geometry=geometry, properties=props, id=str(uuid4())))
+                    features.append(
+                        gs.Feature(geometry=geometry, properties=props, id=str(uuid4()))
+                    )
 
         return gs.FeatureCollection(features)
 
-    def to_geojson(self, pth: os.PathLike | str) -> None:
+    def to_geojson(self, pth: Union[str, os.PathLike]) -> None:
         """
         Save regions as geojson. This file can be loaded in QuPath.
 

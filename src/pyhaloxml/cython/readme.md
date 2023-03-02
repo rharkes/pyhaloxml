@@ -1,1 +1,0 @@
-For version 2.4 I tried to move to cython but never got it to work.

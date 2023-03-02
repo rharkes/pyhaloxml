@@ -4,8 +4,7 @@ File with some basic classes and functions
 import enum
 import logging
 from lxml.etree import _Element
-from pyhaloxml.numba.n_inpoly import point_in_polygon
-import numba
+from pyhaloxml.cython.g_pointinpoly import point_in_polygon
 
 def points_in_polygons(
     points: list[(float, float)], polygons: list[list[(float, float)]]
@@ -13,7 +12,10 @@ def points_in_polygons(
     result = [-1] * len(points)
     for i, point in enumerate(points):
         for j, polygon in enumerate(polygons):
-            if point_in_polygon(numba.typed.List([float(x) for x in point]), numba.typed.List([(float(y[0]), float(y[1])) for y in polygon])):
+            if point_in_polygon(
+                [float(x) for x in point],
+                [(float(y[0]), float(y[1])) for y in polygon],
+            ):
                 result[i] = j
                 continue
     return result
@@ -23,27 +25,30 @@ class Color:
     """
     Class for keeping color rgb information
     """
+
     def __init__(self):
-        self.rgb = (0).to_bytes(length=3, byteorder='little')  # type:bytes
+        self.rgb = (0).to_bytes(length=3, byteorder="little")  # type:bytes
         self.log = logging.getLogger("HaloXML-Color")
 
     def __str__(self) -> str:
-        return hex(int.from_bytes(self.rgb, byteorder='little'))
+        return hex(int.from_bytes(self.rgb, byteorder="little"))
 
     def getrgb(self) -> list[int, int, int]:
         return [int(x) for x in self.rgb]
 
     def setrgb(self, r: int, g: int, b: int) -> None:
         if all([x <= 255 for x in [r, g, b]]):
-            self.rgb = (r + g * 2 ** 8 + b * 2 ** 16).to_bytes(length=3, byteorder='little')
+            self.rgb = (r + g * 2**8 + b * 2**16).to_bytes(
+                length=3, byteorder="little"
+            )
             return
         self.log.error("Color should be <255 for each color")
 
     def getlinecolor(self) -> str:
-        return str(int.from_bytes(self.rgb, byteorder='little'))
+        return str(int.from_bytes(self.rgb, byteorder="little"))
 
     def setlinecolor(self, color: str) -> None:
-        self.rgb = int(color).to_bytes(length=3, byteorder='little')
+        self.rgb = int(color).to_bytes(length=3, byteorder="little")
 
 
 class RegionType(enum.IntEnum):
@@ -85,4 +90,3 @@ def closepolygon(vertices: list[tuple], warn: bool = True) -> list[tuple]:
             )
         vertices.append(vertices[0])
     return vertices
-

@@ -1,12 +1,13 @@
 import logging
 from pyhaloxml import Region, Layer
 from pyhaloxml.misc import RegionType
+
 try:
     import shapely.geometry as sg
 except ImportError as e:
-    logger = logging.getLogger("haloxml-shapely")
-    logger.error("Shapely is not installed. Cannot use the shapely converters of haloxml.")
-    exit()
+    raise ImportError(
+        "Shapely is not installed. Cannot use the shapely converters of haloxml."
+    )
 
 
 def region_to_shapely(region: Region) -> sg.Polygon:

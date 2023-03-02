@@ -17,8 +17,6 @@ keywords = ["Halo", "reader", "annotation"]
 dependencies = [
     "lxml >= 4.9",
     "geojson>=2.5",
-    "numba",
-    "numpy",
 ]
 requires-python = ">=3.9"
 

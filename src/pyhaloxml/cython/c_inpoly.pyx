@@ -10,6 +10,8 @@ def c_pointinpoly(float[:] point, float[:] polygon):
     """
     if point.shape[0] != 2:
         raise Exception("Point should have length 2")
+    if polygon.shape[0]%2 != 0:
+        raise Exception("Polygon should have even length")
     cdef int nvertex = polygon.shape[0]//2
     cdef float p1x,p2x,p1y,p2y
     cdef bool inside = False

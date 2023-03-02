@@ -57,7 +57,11 @@ class Layer:
         Dictonary representation of the layer.
         :return:
         """
-        return {"LineColor": self.linecolor.getlinecolor(), "Name": self.name, "Visible": self.visible}
+        return {
+            "LineColor": self.linecolor.getlinecolor(),
+            "Name": self.name,
+            "Visible": self.visible,
+        }
 
     def addregion(self, region: Region) -> None:
         """

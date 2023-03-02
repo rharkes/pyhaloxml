@@ -15,5 +15,7 @@ for layer in hx.layers:
         if len(region.holes) == 1:
             print(f"Region {i} in annotation {layer.name} has 1 hole.")
         else:
-            print(f"Region {i} in annotation {layer.name} has {len(region.holes)} holes.")
+            print(
+                f"Region {i} in annotation {layer.name} has {len(region.holes)} holes."
+            )
 hx.to_geojson(Path(pth.parent, pth.stem + "_new"))

@@ -9,7 +9,7 @@ import geojson as gs
 
 pth = Path(Path.cwd(), "exampledata", "qupath_test.geojson")
 
-with open(pth, 'r') as f:
+with open(pth, "r") as f:
     geo_data = gs.load(f)
 
 hx = HaloXML()
