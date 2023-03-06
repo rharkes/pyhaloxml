@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyhaloxml"
-version = "2.4.3"
+version = "2.5.0"
 description = "Read and write the annotation files from Halo"
 readme = "README.md"
 authors = [{ name = "Rolf Harkes", email = "r.harkes@nki.nl" }]
@@ -28,7 +28,7 @@ dev = ["black", "bumpver", "pytest", "mypy", "setuptools", "build", "twine"]
 Homepage = "https://github.com/rharkes/pyhaloxml"
 
 [tool.bumpver]
-current_version = "2.4.3"
+current_version = "2.5.0"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
