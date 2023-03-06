@@ -4,7 +4,7 @@ HaloXML Class to import the xml files that are outputted by Halo.
 import logging
 import os
 from pathlib import Path
-from typing import Union
+from typing import Union, Any
 from uuid import uuid4
 
 from lxml import etree
@@ -23,14 +23,14 @@ class HaloXML:
 
     def __init__(self) -> None:
         self.tree = etree.Element("root")  # type:_ElementTree
-        self.layers = []  # type:[Layer]
-        self.valid = False  # type:bool
+        self.layers = []  # type: list[Layer]
+        self.valid = False  # type: bool
         self.log = logging.getLogger("HaloXML")
 
     def __bool__(self) -> bool:
         return self.valid
 
-    def load(self, pth: Union[str, os.PathLike]) -> None:
+    def load(self, pth: Union[str, os.PathLike[Any]]) -> None:
         """
         Load .annotations file
 
@@ -45,8 +45,8 @@ class HaloXML:
             layer = Layer()
             layer.fromattrib(annotation.attrib)
             regions = annotation.getchildren()[0]
-            neg = []  # type: [Region]
-            pos = []  # type: [Region]
+            neg = []  # type: list[Region]
+            pos = []  # type: list[Region]
             for region in regions:  # sort regions for positive ore negative
                 if region.attrib["NegativeROA"] == "1":
                     neg.append(Region(region))
@@ -76,7 +76,7 @@ class HaloXML:
         self.valid = True
         logging.info(f"Finished loading {pth.stem}")
 
-    def save(self, pth: Union[str, os.PathLike]) -> None:
+    def save(self, pth: Union[str, os.PathLike[Any]]) -> None:
         """
         Save the data as .annotation file.
 
@@ -104,7 +104,7 @@ class HaloXML:
                     regions.append(n.region)
             anno.append(regions)
             new_root.append(anno)
-        return etree.tostring(new_root)
+        return bytes(etree.tostring(new_root))
 
     def as_geojson(self) -> gs.FeatureCollection:
         """
@@ -148,7 +148,7 @@ class HaloXML:
 
         return gs.FeatureCollection(features)
 
-    def to_geojson(self, pth: Union[str, os.PathLike]) -> None:
+    def to_geojson(self, pth: Union[str, os.PathLike[Any]]) -> None:
         """
         Save regions as geojson. This file can be loaded in QuPath.
 

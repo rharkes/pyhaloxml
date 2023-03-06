@@ -18,7 +18,7 @@ class Layer:
         self.linecolor = Color()  # type:Color
         self.name = ""  # type:str
         self.visible = "True"  # type:str
-        self.regions = []  # type:[Region]
+        self.regions = []  # type:list[Region]
         self.log = logging.getLogger("HaloXML-Layer")
 
     def __str__(self) -> str:
@@ -34,7 +34,7 @@ class Layer:
         self.name = annotationattribs["Name"]
         self.visible = annotationattribs["Visible"]
 
-    def fromdict(self, dinfo: dict) -> None:
+    def fromdict(self, dinfo: dict[str, str]) -> None:
         """
         Populate the layer with information from a dictionary
 
@@ -52,7 +52,7 @@ class Layer:
         """
         return json.dumps(self.todict(), sort_keys=True)
 
-    def todict(self) -> dict:
+    def todict(self) -> dict[str, str]:
         """
         Dictonary representation of the layer.
         :return:

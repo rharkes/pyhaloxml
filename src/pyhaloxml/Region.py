@@ -2,6 +2,7 @@
 Region.py
 """
 import logging
+import math
 from numbers import Real
 from lxml.etree import _Element, Element
 import geojson as gs
@@ -18,7 +19,7 @@ class Region:
 
     def __init__(self, region: _Element) -> None:
         self.region = region  # type: _Element
-        self.holes = []  # type: [Region]
+        self.holes = []  # type: list[Region]
         self.type = RegionType.Polygon  # type: RegionType
         if region.attrib["Type"] == "Rectangle":
             self.type = RegionType.Rectangle
@@ -29,22 +30,22 @@ class Region:
         self.hasendcaps = region.attrib["HasEndcaps"] == "1"  # type: bool
         self.log = logging.getLogger("HaloXML:Region")  # type: logging.Logger
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.region.attrib)
 
-    def add_hole(self, negative_region) -> None:
+    def add_hole(self, negative_region: "Region") -> None:
         """
         Halo regions can have holes
         :param negative_region: element of type Region
         """
         self.holes.append(negative_region)
 
-    def getvertices(self) -> list[tuple]:
+    def getvertices(self) -> list[tuple[float, float]]:
         """
         Get the vertices of the region
         :return: the vertices element
         """
-        vertices = [(None, None)]
+        vertices = [(math.nan, math.nan)]
         if self.type == RegionType.Polygon:
             if self.hasendcaps:
                 vertices = getvertices(self.region)
@@ -70,12 +71,12 @@ class Region:
             vertices = [(x + center[0], y + center[1]) for (x, y) in e]
         return vertices
 
-    def getpointinregion(self) -> tuple:
+    def getpointinregion(self) -> tuple[float, float]:
         """
         Returns a point in the region or on the edge of the region
         :return:
         """
-        pointinregion = (None, None)
+        pointinregion = (math.nan, math.nan)
         if self.type in [RegionType.Polygon, RegionType.Rectangle]:
             pointinregion = getvertex(self.region)
         if self.type == RegionType.Ellipse:
@@ -102,7 +103,7 @@ class Region:
         return polygon
 
 
-def region_from_coordinates(coords: list[list[list[Real, Real]]]) -> Region:
+def region_from_coordinates(coords: list[list[tuple[Real, Real]]]) -> Region:
     """
     Creates a HaloXML Region from coordinates. It must be a list of lists of coordinates.
     The first list is the outer polygon, the next lists are the polygonal holes and must be contained in the first polygon.

@@ -1,6 +1,5 @@
-import logging
-from pyhaloxml import Region, Layer
-from pyhaloxml.misc import RegionType
+from .. import Region, Layer
+from ..misc import RegionType
 
 try:
     import shapely.geometry as sg
