@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=61.0.0", "wheel", "Cython"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -58,7 +58,7 @@ pythonpath = [
 ]
 
 [tool.mypy]
-python_version = ['py310', 'py311']
+python_version = '3.11'
 mypy_path = "src"
 packages = "pyhaloxml"
 strict = true
