@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel", "Cython"]
-build-backend = "setuptools.build_meta"
+requires = ["maturin>=0.14,<0.15"]
+build-backend = "maturin"
 
 [project]
 name = "pyhaloxml"
@@ -74,3 +74,6 @@ ignore_missing_imports  = true
 [[tool.mypy.overrides]]
 module = "shapely.*"
 ignore_missing_imports  = true
+
+[tool.maturin]
+python-source = "src"
