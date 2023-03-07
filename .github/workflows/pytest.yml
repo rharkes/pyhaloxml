@@ -19,7 +19,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pytest lxml geojson maturin
-          python -m cargo build --release
+          cargo build --release
       - name: Test with pytest
         run: |
           pytest
