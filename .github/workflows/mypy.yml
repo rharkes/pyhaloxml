@@ -16,9 +16,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install mypy lxml geojson maturin
+        run: pip install mypy lxml geojson maturin
       - name: Test with pytest
-        run: |
-          mypy
+        run: mypy

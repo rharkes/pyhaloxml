@@ -77,3 +77,9 @@ ignore_missing_imports  = true
 
 [tool.maturin]
 python-source = "src"
+
+[tool.cibuildwheel]
+before-all = "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+environment = "PATH=$PATH:/root/.cargo/bin"
+build = "cp310-*"
+skip = "*-musllinux_i686"
