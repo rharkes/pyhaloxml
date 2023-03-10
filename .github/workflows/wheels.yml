@@ -4,11 +4,11 @@ on: workflow_call
 
 jobs:
   wheels_lint:
-    uses: wimpomp/pyhaloxml/.github/workflows/black.yml@lint
+    uses: ./.github/workflows/black.yml@main
   wheels_mypy:
-    uses: wimpomp/pyhaloxml/.github/workflows/mypy.yml@mypy
+    uses: ./.github/workflows/mypy.yml@main
   wheels_pytest:
-    uses: wimpomp/pyhaloxml/.github/workflows/pytest.yml@pytest
+    uses: ./.github/workflows/pytest.yml@main
   wheels:
     name: wheels
     needs: [wheels_lint, wheels_mypy, wheels_pytest]

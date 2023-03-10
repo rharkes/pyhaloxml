@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   publish_wheels:
-    uses: wimpomp/pyhaloxml/.github/workflows/wheels.yml@wheels
+    uses: ./.github/workflows/wheels.yml@main
   publish:
     name: publish
     needs: publish_wheels
