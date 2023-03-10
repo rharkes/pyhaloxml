@@ -1,15 +1,17 @@
 name: Wheels
 
-on:
-  workflow_run:
-    workflows: [Lint, MyPy, PyTest]
-    types: [completed]
+on: workflow_call
 
 jobs:
+  wheels_lint:
+    uses: wimpomp/pyhaloxml/.github/workflows/black.yml@lint
+  wheels_mypy:
+    uses: wimpomp/pyhaloxml/.github/workflows/mypy.yml@mypy
+  wheels_pytest:
+    uses: wimpomp/pyhaloxml/.github/workflows/pytest.yml@pytest
   wheels:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    needs: [lint, mypy, pytest]
-    name: Build wheels on ${{ matrix.os }}
+    name: wheels
+    needs: [wheels_lint, wheels_mypy, wheels_pytest]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
