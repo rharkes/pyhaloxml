@@ -3,7 +3,7 @@ name: PyTest
 on: [push, pull_request]
 
 jobs:
-  build:
+  pytest:
     runs-on: ubuntu-latest
     strategy:
       matrix:

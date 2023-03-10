@@ -1,9 +1,14 @@
 name: Wheels
 
-on: [push, pull_request]
+on:
+  workflow_run:
+    workflows: [Lint, MyPy, PyTest]
+    types: [completed]
 
 jobs:
-  build_wheels:
+  wheels:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: [lint, mypy, pytest]
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -19,7 +24,9 @@ jobs:
       - name: Build
         run: |
           pip install cibuildwheel
-          cibuildwheel --output-dir wheelhouse
+          cibuildwheel --output-dir dist
+      - name: Build source dist
+        run: python -m build . --sdist
       - uses: actions/upload-artifact@v3
         with:
-          path: ./wheelhouse/*.whl
+          path: ./dist
