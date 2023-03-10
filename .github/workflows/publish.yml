@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   publish_wheels:
-    uses: ./.github/workflows/wheels.yml@main
+    uses: ./.github/workflows/wheels.yml
   publish:
     name: publish
     needs: publish_wheels
