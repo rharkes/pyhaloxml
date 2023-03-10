@@ -3,9 +3,11 @@ name: Publish
 on: [push, pull_request]
 
 jobs:
-  publish:
+  publish_wheels:
     uses: wimpomp/pyhaloxml/.github/workflows/wheels.yml@wheels
+  publish:
     name: publish
+    needs: publish_wheels
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
