@@ -31,4 +31,5 @@ jobs:
         run: python -m build . --sdist
       - uses: actions/upload-artifact@v3
         with:
+          name: dist
           path: ./dist
