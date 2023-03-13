@@ -18,6 +18,6 @@ Python code to read/write .annotation files from Halo. Can export as .geojson fo
 `pip install pyhaloxml`
 
 # Loading speed
-Rust is used to match the negative regions to positive regions, thanks to [w.pomp](github.com/wimpomp/)!
+Rust is used to match the negative regions to positive regions, thanks to [Wim Pomp](github.com/wimpomp/)!
 
 It takes 41 seconds to load a 30.9MB file with 856454 vertices in 5769 regions with 731 holes.
