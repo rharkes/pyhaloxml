@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel", "Cython"]
-build-backend = "setuptools.build_meta"
+requires = ["maturin>=0.14,<0.15"]
+build-backend = "maturin"
 
 [project]
 name = "pyhaloxml"
@@ -74,3 +74,12 @@ ignore_missing_imports  = true
 [[tool.mypy.overrides]]
 module = "shapely.*"
 ignore_missing_imports  = true
+
+[tool.maturin]
+python-source = "src"
+
+[tool.cibuildwheel]
+before-all = "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+environment = "PATH=$PATH:/root/.cargo/bin"
+build = "cp310-*"
+skip = "*-musllinux_i686"

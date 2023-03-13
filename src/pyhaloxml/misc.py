@@ -6,7 +6,7 @@ import logging
 import math
 
 from lxml.etree import _Element
-from pyhaloxml.cython.g_pointinpoly import point_in_polygon
+from pyhaloxml.pyhaloxml_rs import point_in_polygon
 
 
 def points_in_polygons(
@@ -15,10 +15,7 @@ def points_in_polygons(
     result = [-1] * len(points)
     for i, point in enumerate(points):
         for j, polygon in enumerate(polygons):
-            if point_in_polygon(
-                point,
-                [(float(y[0]), float(y[1])) for y in polygon],
-            ):
+            if point_in_polygon(point, polygon):
                 result[i] = j
                 continue
     return result

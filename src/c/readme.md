@@ -1,1 +1,0 @@
-C code for finding if a point is inside a polygon.

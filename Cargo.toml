@@ -1,0 +1,16 @@
+[package]
+name = "pyhaloxml_rs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "pyhaloxml_rs"
+path = "src/rust/lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+pyo3 = { version = "0.18.1", features = ["extension-module", "abi3-py310", "generate-import-lib"] }
+
+[package.metadata.maturin]
+name = "pyhaloxml.pyhaloxml_rs"

@@ -130,3 +130,7 @@ dmypy.json
 
 # PyCharm .idea
 /.idea
+
+# Rust
+Cargo.lock
+.rustc_info.json
