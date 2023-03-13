@@ -1,6 +1,6 @@
 name: MyPy
 
-on: workflow_call
+on: [workflow_call, push, pull_request]
 
 jobs:
   mypy:
