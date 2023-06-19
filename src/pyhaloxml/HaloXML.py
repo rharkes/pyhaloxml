@@ -3,8 +3,9 @@ HaloXML Class to import the xml files that are outputted by Halo.
 """
 import logging
 import os
+from io import BytesIO
 from pathlib import Path
-from typing import Union, Any
+from typing import Union, Any, BinaryIO
 from uuid import uuid4
 
 from lxml import etree
@@ -30,16 +31,13 @@ class HaloXML:
     def __bool__(self) -> bool:
         return self.valid
 
-    def load(self, pth: Union[str, os.PathLike[Any]]) -> None:
+    def loadstream(self, fp: BinaryIO) -> None:
         """
-        Load .annotations file
 
-        :param pth: path to the .annotations file
+        :param fp:
+        :return:
         """
-        pth = Path(pth)
-        if not pth.exists() or not pth.is_file():
-            raise FileNotFoundError(pth)
-        self.tree = etree.parse(pth)
+        self.tree = etree.parse(fp)
         annotations = self.tree.getroot().getchildren()
         for annotation in annotations:  # go over each layer in the file
             layer = Layer()
@@ -74,6 +72,18 @@ class HaloXML:
 
             self.layers.append(layer)
         self.valid = True
+
+    def load(self, pth: Union[str, os.PathLike[Any]]) -> None:
+        """
+        Load .annotations file
+
+        :param pth: path to the .annotations file
+        """
+        pth = Path(pth)
+        if not pth.exists() or not pth.is_file():
+            raise FileNotFoundError(pth)
+        with open(pth, "rb") as fp:
+            self.loadstream(fp)
         logging.info(f"Finished loading {pth.stem}")
 
     def save(self, pth: Union[str, os.PathLike[Any]]) -> None:
