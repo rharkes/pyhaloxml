@@ -1,7 +1,7 @@
 API
 ===
 HaloXMLFile
--------
+-----------
 
 .. automodule::  pyhaloxml.HaloXMLFile
     :members:
@@ -20,7 +20,7 @@ Region
 
 
 Layer
--------
+-----
 
 .. automodule::  pyhaloxml.Layer
     :members:
