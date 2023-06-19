@@ -1,10 +1,5 @@
 API
 ===
-HaloXMLFile
------------
-
-.. automodule::  pyhaloxml.HaloXMLFile
-    :members:
 
 HaloXML
 -------
@@ -25,9 +20,3 @@ Layer
 .. automodule::  pyhaloxml.Layer
     :members:
 
-
-Shapely
--------
-
-.. automodule::  pyhaloxml.shapely
-    :members:
