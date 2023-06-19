@@ -1,7 +1,7 @@
-[![mypy](https://github.com/rharkes/pyhaloxml/actions/workflows/mypy.yml/badge.svg)](https://github.com/rharkes/pyhaloxml/actions/workflows/mypy.yml)
+[![Mypy](https://github.com/rharkes/pyhaloxml/actions/workflows/mypy.yml/badge.svg)](https://github.com/rharkes/pyhaloxml/actions/workflows/mypy.yml)
 [![Black](https://github.com/rharkes/pyhaloxml/actions/workflows/black.yml/badge.svg)](https://github.com/rharkes/pyhaloxml/actions/workflows/black.yml)
-[![Black](https://github.com/rharkes/pyhaloxml/actions/workflows/pytest.yml/badge.svg)](https://github.com/rharkes/pyhaloxml/actions/workflows/pytest.yml)
-
+[![Pytest](https://github.com/rharkes/pyhaloxml/actions/workflows/pytest.yml/badge.svg)](https://github.com/rharkes/pyhaloxml/actions/workflows/pytest.yml)
+[![Docs](https://readthedocs.org/projects/pyhaloxml/badge/?version=latest&style=flat)](https://readthedocs.org/projects/pyhaloxml)
 # PyHaloXML
 Python code to read/write .annotation files from Halo. Can export as .geojson for further analysis.
 
