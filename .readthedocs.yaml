@@ -5,7 +5,7 @@ build:
   tools:
     python: "3.11"
   commands:
-    - sudo apt install rustc
+    - pip install maturin
 
 sphinx:
   configuration: docs/source/conf.py
