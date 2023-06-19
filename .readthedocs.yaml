@@ -5,8 +5,6 @@ build:
   tools:
     python: "3.11"
     rust: "1.61"
-  commands:
-    - pip install shapely
 
 sphinx:
   configuration: docs/source/conf.py
@@ -15,5 +13,6 @@ sphinx:
 python:
   # Install our python package before building the docs
   install:
+    - requirements: docs/requirements.txt
     - method: pip
       path: .
