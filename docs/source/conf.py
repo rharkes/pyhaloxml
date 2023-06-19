@@ -3,7 +3,7 @@ import pyhaloxml
 
 # -- Project information
 project = "pyhaloxml"
-copyright = "2022, R.Harkes"
+copyright = "2023, R.Harkes"
 author = "R.Harkes"
 
 release = "2.5.3"

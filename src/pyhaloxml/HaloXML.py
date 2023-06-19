@@ -20,6 +20,9 @@ from .misc import RegionType, points_in_polygons
 
 
 class HaloXMLFile(AbstractContextManager[Any]):
+    """
+    Context manager for handeling .annotation files
+    """
     def __init__(self, pth: Union[str, os.PathLike[Any]], mode: str = "r") -> None:
         if mode not in ["r", "w"]:
             raise KeyError(f"Invalid mode: {mode}")
@@ -50,7 +53,7 @@ class HaloXMLFile(AbstractContextManager[Any]):
 
 class HaloXML:
     """
-    The main class around the halo .annotations files.
+    The class to hold annotation data.
     """
 
     def __init__(self) -> None:
