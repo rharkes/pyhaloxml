@@ -23,7 +23,7 @@ class HaloXMLFile(AbstractContextManager[Any]):
     """
     Context manager for handeling .annotation files
     """
-    
+
     def __init__(self, pth: Union[str, os.PathLike[Any]], mode: str = "r") -> None:
         if mode not in ["r", "w"]:
             raise KeyError(f"Invalid mode: {mode}")
