@@ -5,7 +5,7 @@ build:
   tools:
     python: "3.11"
   commands:
-    - rustup
+    - sudo apt install rustc
 
 sphinx:
   configuration: docs/source/conf.py
