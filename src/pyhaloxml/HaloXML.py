@@ -1,11 +1,13 @@
 """
 HaloXML Class to import the xml files that are outputted by Halo.
 """
+import io
 import logging
 import os
-from io import BytesIO
+from contextlib import AbstractContextManager
 from pathlib import Path
-from typing import Union, Any, BinaryIO
+from types import TracebackType
+from typing import Union, Any, BinaryIO, Type, Optional
 from uuid import uuid4
 
 from lxml import etree
@@ -15,6 +17,35 @@ import geojson as gs
 from .Layer import Layer
 from .Region import Region
 from .misc import RegionType, points_in_polygons
+
+
+class HaloXMLFile(AbstractContextManager[Any]):
+    def __init__(self, pth: Union[str, os.PathLike[Any]], mode: str = "r") -> None:
+        if mode not in ["r", "w"]:
+            raise KeyError(f"Invalid mode: {mode}")
+        pth = Path(pth)
+        if mode == "r" and (not pth.exists() or not pth.is_file()):
+            raise FileNotFoundError(pth)
+        self.pth = pth
+        self.mode = mode
+
+    def __enter__(self) -> "HaloXML":
+        self.hx = HaloXML()
+        if self.mode == "r":
+            self.file = io.FileIO(self.pth, "r")
+            self.hx.loadstream(self.file)
+        return self.hx
+
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
+        if self.mode == "w":
+            self.hx.save(self.pth)
+        else:
+            self.file.close()
 
 
 class HaloXML:
