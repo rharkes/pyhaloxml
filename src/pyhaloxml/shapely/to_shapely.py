@@ -1,4 +1,5 @@
-from .. import Region, Layer
+from ..Layer import Layer
+from ..Region import Region
 from ..misc import RegionType
 
 try:
