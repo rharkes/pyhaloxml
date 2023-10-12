@@ -5,7 +5,7 @@
 # PyHaloXML
 Python code to read/write .annotation files from Halo. Can export as .geojson for further analysis.
 
-# Examples
+## Examples
 [Example 1](https://github.com/rharkes/pyhaloxml/blob/main/examples/example1.py) : Move rectangles to a different layer and save as `.annotation`.
 
 [Example 2](https://github.com/rharkes/pyhaloxml/blob/main/examples/example2.py) : Check if annotations have holes in them and save as `.geojson`.
@@ -14,10 +14,15 @@ Python code to read/write .annotation files from Halo. Can export as .geojson fo
 
 [Example 4](https://github.com/rharkes/pyhaloxml/blob/main/examples/example4.py) : Create a .annotation file from coordinates.
 
-# Installation
+## Installation
 `pip install pyhaloxml`
 
-# Loading speed
+## Loading speed
 Rust is used to match the negative regions to positive regions, thanks to [Wim Pomp](github.com/wimpomp/)!
 
 It takes 41 seconds to load a 30.9MB file with 856454 vertices in 5769 regions with 731 holes.
+
+## Development
+* Install [Rust](https://rustup.rs/)
+* Clone the repository
+* `pip install -e .`
