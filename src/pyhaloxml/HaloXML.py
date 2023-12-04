@@ -7,8 +7,7 @@ import os
 from contextlib import AbstractContextManager
 from pathlib import Path
 from types import TracebackType
-from typing import Union, Any, BinaryIO, Type, Optional
-from uuid import uuid4
+from typing import Union, Any, BinaryIO, Type, Optional, List
 
 from lxml import etree
 from lxml.etree import _ElementTree
@@ -61,7 +60,7 @@ class HaloXML:
         self.tree = etree.Element("root")  # type:_ElementTree
         self.layers = []  # type: list[Layer]
         self.valid = False  # type: bool
-        self.log = logging.getLogger("HaloXML")
+        self.log = logging.getLogger(__name__)
 
     def __bool__(self) -> bool:
         return self.valid
@@ -82,7 +81,7 @@ class HaloXML:
             pos = []  # type: list[Region]
             for region in regions:  # sort regions for positive ore negative
                 if region.attrib["NegativeROA"] == "1":
-                    neg.append(Region(region))
+                    pos.append(Region(region))
                 else:
                     pos.append(Region(region))
             # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
@@ -157,39 +156,11 @@ class HaloXML:
 
         :return: A geojson featurecollection with all the annotations.
         """
-        features = []
+        features = []  # type: List[gs.Feature]
         for layer in self.layers:
-            props = {
-                "objectType": "annotation",
-                "name": layer.name,
-                "classification": {
-                    "name": layer.name,
-                    "color": layer.linecolor.getrgb(),
-                },
-                "isLocked": False,
-            }
-            if len(layer.regions) == 1:
-                geometry = layer.regions[0].as_geojson()
-                features.append(
-                    gs.Feature(geometry=geometry, properties=props, id=str(uuid4()))
-                )
-            else:  # try to put them in a MultiPolygon
-                if any([x.type == RegionType.Ruler for x in layer.regions]):
-                    for region in layer.regions:
-                        features.append(
-                            gs.Feature(
-                                geometry=region.as_geojson(),
-                                properties=props,
-                                id=str(uuid4()),
-                            )
-                        )
-                else:
-                    geometry = gs.MultiPolygon(
-                        [x.as_geojson()["coordinates"] for x in layer.regions]
-                    )
-                    features.append(
-                        gs.Feature(geometry=geometry, properties=props, id=str(uuid4()))
-                    )
+            fts = layer.as_geojson()
+            for ft in fts:
+                features.append(ft)
 
         return gs.FeatureCollection(features)
 

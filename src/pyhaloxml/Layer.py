@@ -3,10 +3,12 @@ Layer.py
 """
 import json
 import logging
-
+from typing import List
+from uuid import uuid4
+import geojson as gs
 from lxml.etree import _Attrib
 from pyhaloxml.Region import Region
-from pyhaloxml.misc import Color
+from pyhaloxml.misc import Color, RegionType
 
 
 class Layer:
@@ -62,6 +64,28 @@ class Layer:
             "Name": self.name,
             "Visible": self.visible,
         }
+
+    def as_geojson(self) -> List[gs.Feature]:
+        """
+        A geojson representation of all regions in this layer
+        """
+        props = {
+            "objectType": "annotation",
+            "name": self.name,
+            "classification": {
+                "name": self.name,
+                "color": self.linecolor.getrgb(),
+            },
+            "isLocked": False,
+        }
+        features = []
+        for region in self.regions:
+            features.append(
+                gs.Feature(
+                    geometry=region.as_geojson(), properties=props, id=str(uuid4())
+                )
+            )
+        return features
 
     def addregion(self, region: Region) -> None:
         """

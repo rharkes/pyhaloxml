@@ -16,12 +16,12 @@ classifiers = [
 keywords = ["Halo", "reader", "annotation"]
 dependencies = [
     "lxml >= 4.9",
-    "geojson>=2.5",
+    "geojson>=3.0",
 ]
 requires-python = ">=3.10"
 
 [project.optional-dependencies]
-shapely = ["shapely"]
+shapely = ["shapely >= 2.0"]
 dev = ["black", "bumpver", "pytest", "mypy", "setuptools", "build", "twine"]
 
 [project.urls]

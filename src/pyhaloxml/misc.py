@@ -60,10 +60,12 @@ class RegionType(enum.IntEnum):
     * Polygon (vertex elements)
     """
 
+    Unknown = -1
     Rectangle = 0
     Ellipse = 1
     Ruler = 2
     Polygon = 3
+    Pin = 4
 
 
 def getvertices(element: _Element) -> list[tuple[float, float]]:
