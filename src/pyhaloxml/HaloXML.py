@@ -77,35 +77,43 @@ class HaloXML:
             layer = Layer()
             layer.fromattrib(annotation.attrib)
             regions = annotation.getchildren()[0]
-            neg = []  # type: list[Region]
-            pos = []  # type: list[Region]
             for region in regions:  # sort regions for positive ore negative
-                if region.attrib["NegativeROA"] == "1":
-                    pos.append(Region(region))
+                layer.addregion(Region(region))
+        self.valid = True
+
+    def matchnegative(self) -> None:
+        for layeridx, layer in enumerate(self.layers):
+            neg_points = []
+            pos_map = []  # type: list[int]  # index to original
+            neg_map = []  # type: list[int]
+            for idx, region in enumerate(layer.regions):
+                if region.isnegative:
+                    neg_points.append(region.getpointinregion())
+                    neg_map.append(idx)
                 else:
-                    pos.append(Region(region))
-            # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
-            logging.info(
-                f"Found {len(pos)} positive regions and {len(neg)} negative regions."
-            )
-            if neg:
-                neg_points = [n.getpointinregion() for n in neg]
-                pos_polygons = [p.getvertices() for p in pos]
+                    pos_map.append(idx)
+            if neg_points:
+                pos_polygons = [
+                    region.getvertices()
+                    for region in layer.regions
+                    if not region.isnegative
+                ]
                 pos_idxs = points_in_polygons(
                     neg_points, pos_polygons
                 )  # locate the positive polygon that belongs to each negative polygon
                 for neg_idx, pos_idx in enumerate(
                     pos_idxs
                 ):  # add the negative as hole to the apropriate positive
-                    pos[pos_idx].add_hole(neg[neg_idx])
-                for p in pos:
-                    layer.addregion(p)
-            else:
-                for r in pos:
-                    layer.addregion(r)
-
-            self.layers.append(layer)
-        self.valid = True
+                    if pos_idx == -1:
+                        self.log.warning(
+                            f"Did not find a matching positive region for region {neg_map[neg_idx]} in layer {layeridx}"
+                        )
+                    else:
+                        layer.regions[pos_map[pos_idx]].add_hole(
+                            layer.regions[neg_map[neg_idx]]
+                        )
+            # remove all negative regions
+            layer.regions = [x for x in layer.regions if not x.isnegative]
 
     def load(self, pth: Union[str, os.PathLike[Any]]) -> None:
         """

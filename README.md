@@ -26,3 +26,8 @@ It takes 41 seconds to load a 30.9MB file with 856454 vertices in 5769 regions w
 * Install [Rust](https://rustup.rs/)
 * Clone the repository
 * `pip install -e .`
+
+### Notes on development
+* The xml is relatively simple. There are Annotations and an annotation contains regions.
+* Regions can be either positive or negative. However regions in an annotation are not hierarchical. So there is no telling what negative region should go with what positive region.
+* This package expects a negative region to be fully enclosed by one positive region. The matching is done by taking a single point that is inside or on the border of the negative region and checking if it is inside a positive region.

@@ -7,7 +7,7 @@ from numbers import Real
 from lxml.etree import _Element, Element
 import geojson as gs
 from pyhaloxml.ellipse import ellipse2polygon
-from pyhaloxml.misc import RegionType, getvertices, closepolygon, getvertex
+from pyhaloxml.misc import RegionType, getvertices, closepolygon, getvertex, Comment
 
 
 class Region:
@@ -20,6 +20,7 @@ class Region:
     def __init__(self, region: _Element) -> None:
         self.region = region  # type: _Element
         self.holes = []  # type: list[Region]
+        self.comments = []  # type: list[Comment]
         self.vertices = [(math.nan, math.nan)]  # type: list[tuple[float, float]]
         self.type = RegionType.Unknown  # type: RegionType
         if region.attrib["Type"] == "Polygon":
@@ -32,33 +33,26 @@ class Region:
             self.type = RegionType.Ellipse
         elif region.attrib["Type"] == "Pin":
             self.type = RegionType.Pin
-
+        self.isnegative = region.attrib["NegativeROA"] == "1"  # type: bool
         self.hasendcaps = region.attrib["HasEndcaps"] == "1"  # type: bool
+        for e in region.getchildren():
+            if e.tag == "Comments":
+                for c in e.getchildren():
+                    newcomment = Comment()
+                    newcomment.setcomment(c)
+                    self.comments.append(newcomment)
         self.log = logging.getLogger("HaloXML:Region")  # type: logging.Logger
 
     def __str__(self) -> str:
         return str(self.region.attrib)
 
-    def has_area(self) -> bool:
-        if self.type in [RegionType.Rectangle, RegionType.Ellipse]:
-            return True
-        if self.type == RegionType.Polygon:
-            vertices = self.getvertices()
-            if vertices[-1] != vertices[0]:
-                return False  # it is a linestring, not a polygon
-            else:
-                return True
-        return False
+    def add_hole(self, hole: "Region") -> None:
+        self.holes.append(hole)
 
-    def add_hole(self, negative_region: "Region") -> None:
-        """
-        Halo regions can have holes
-        :param negative_region: element of type Region
-        """
-        if self.has_area():
-            self.holes.append(negative_region)
-        else:
-            self.log.error("Cannot add a hole to a region without an area.")
+    def has_area(self) -> bool:
+        if self.type in [RegionType.Rectangle, RegionType.Ellipse, RegionType.Polygon]:
+            return True
+        return False
 
     def getvertices(self) -> list[tuple[float, float]]:
         """
@@ -125,8 +119,6 @@ class Region:
             geoj = gs.Point(vertices[0])
         elif self.has_area():
             polygon = [vertices]
-            for v in self.holes:
-                polygon.append(v.getvertices())
             geoj = gs.Polygon(polygon)
             if not geoj.is_valid:
                 self.log.warning("Polygon is not valid!")
@@ -137,11 +129,14 @@ class Region:
         return geoj
 
 
-def region_from_coordinates(coords: list[list[tuple[Real, Real]]]) -> Region:
+def region_from_coordinates(
+    coords: list[list[tuple[Real, Real]]], comments: list[Comment] = []
+) -> Region:
     """
     Creates a HaloXML Region from coordinates. It must be a list of lists of coordinates.
     The first list is the outer polygon, the next lists are the polygonal holes and must be contained in the first polygon.
     :param coords:
+    :param comments
     :return:
     """
     region = Element(
@@ -151,6 +146,10 @@ def region_from_coordinates(coords: list[list[tuple[Real, Real]]]) -> Region:
     for v in coords[0]:
         vertices.append(Element("V", {"X": str(int(v[0])), "Y": str(int(v[1]))}))
     region.append(vertices)
+    comments_e = Element("Comments")
+    for c in comments:
+        comments_e.apppend(c.getcomment())
+    region.append(comments_e)
     reg = Region(region)
     for i in range(1, len(coords)):
         region = Element(

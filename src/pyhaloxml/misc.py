@@ -4,8 +4,8 @@ File with some basic classes and functions
 import enum
 import logging
 import math
-
-from lxml.etree import _Element
+from datetime import datetime
+from lxml.etree import _Element, Element
 from pyhaloxml.pyhaloxml_rs import point_in_polygon
 
 
@@ -19,6 +19,45 @@ def points_in_polygons(
                 result[i] = j
                 continue
     return result
+
+
+class Comment:
+    def __init__(self, author: str = "<no user>", body: str = "") -> None:
+        self._author = author
+        self._body = body
+        self._createdtime = datetime.now()
+        self._modifiedtime = datetime.now()
+
+    def __str__(self) -> str:
+        return self._body
+
+    def setcomment(self, e: _Element) -> None:
+        self._author = e.attrib["Author"]
+        self._body = e.attrib["Body"]
+        self._createdtime = datetime.fromisoformat(e.attrib["CreatedTime"])
+        self._modifiedtime = datetime.fromisoformat(e.attrib["ModifiedTime"])
+
+    def setbody(self, body: str) -> None:
+        self._body = body
+        self._modifiedtime = datetime.now()
+
+    def getcomment(self) -> _Element:
+        comment = Element(
+            "Comment",
+            {
+                "Author": self._author,
+                "Body": self._body,
+                "CreatedTime": self.getcreated(),
+                "ModifiedTime": self.getmodified(),
+            },
+        )
+        return comment
+
+    def getmodified(self) -> str:
+        return self._modifiedtime.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+    def getcreated(self) -> str:
+        return self._createdtime.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 class Color:
@@ -66,6 +105,9 @@ class RegionType(enum.IntEnum):
     Ruler = 2
     Polygon = 3
     Pin = 4
+
+    def __str__(self) -> str:
+        return self.name
 
 
 def getvertices(element: _Element) -> list[tuple[float, float]]:

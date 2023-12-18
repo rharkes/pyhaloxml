@@ -8,7 +8,7 @@ from uuid import uuid4
 import geojson as gs
 from lxml.etree import _Attrib
 from pyhaloxml.Region import Region
-from pyhaloxml.misc import Color, RegionType
+from pyhaloxml.misc import Color
 
 
 class Layer:
@@ -25,6 +25,12 @@ class Layer:
 
     def __str__(self) -> str:
         return self.tojson()
+
+    def contains_negative(self) -> bool:
+        """
+        Are there any negative regions in the layer
+        """
+        return any([x.isnegative for x in self.regions])
 
     def fromattrib(self, annotationattribs: _Attrib) -> None:
         """
