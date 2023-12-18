@@ -79,6 +79,7 @@ class HaloXML:
             regions = annotation.getchildren()[0]
             for region in regions:  # sort regions for positive ore negative
                 layer.addregion(Region(region))
+            self.layers.append(layer)
         self.valid = True
 
     def matchnegative(self) -> None:
