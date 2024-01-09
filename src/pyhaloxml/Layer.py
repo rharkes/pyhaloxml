@@ -124,7 +124,7 @@ class Layer:
                 neg_points, pos_polygons
             )  # locate the positive polygon that belongs to each negative polygon
             for neg_idx, pos_idx in enumerate(
-                    pos_idxs
+                pos_idxs
             ):  # add the negative as hole to the apropriate positive
                 if pos_idx == -1:
                     self.log.warning(

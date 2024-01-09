@@ -23,8 +23,6 @@ def points_in_polygons(
     return result
 
 
-
-
 class Comment:
     def __init__(self, author: str = "<no user>", body: str = "") -> None:
         self._author = author
