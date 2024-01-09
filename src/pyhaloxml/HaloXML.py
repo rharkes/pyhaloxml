@@ -15,7 +15,6 @@ import geojson as gs
 
 from .Layer import Layer
 from .Region import Region
-from .misc import RegionType, points_in_polygons
 
 
 class HaloXMLFile(AbstractContextManager[Any]):
@@ -83,38 +82,8 @@ class HaloXML:
         self.valid = True
 
     def matchnegative(self) -> None:
-        for layeridx, layer in enumerate(self.layers):
-            neg_points = []
-            pos_map = []  # type: list[int]  # index to original
-            neg_map = []  # type: list[int]
-            for idx, region in enumerate(layer.regions):
-                if region.isnegative:
-                    neg_points.append(region.getpointinregion())
-                    neg_map.append(idx)
-                else:
-                    pos_map.append(idx)
-            if neg_points:
-                pos_polygons = [
-                    region.getvertices()
-                    for region in layer.regions
-                    if not region.isnegative
-                ]
-                pos_idxs = points_in_polygons(
-                    neg_points, pos_polygons
-                )  # locate the positive polygon that belongs to each negative polygon
-                for neg_idx, pos_idx in enumerate(
-                    pos_idxs
-                ):  # add the negative as hole to the apropriate positive
-                    if pos_idx == -1:
-                        self.log.warning(
-                            f"Did not find a matching positive region for region {neg_map[neg_idx]} in layer {layeridx}"
-                        )
-                    else:
-                        layer.regions[pos_map[pos_idx]].add_hole(
-                            layer.regions[neg_map[neg_idx]]
-                        )
-            # remove all negative regions
-            layer.regions = [x for x in layer.regions if not x.isnegative]
+        for layer in self.layers:
+            layer.match_negative()
 
     def load(self, pth: Union[str, os.PathLike[Any]]) -> None:
         """

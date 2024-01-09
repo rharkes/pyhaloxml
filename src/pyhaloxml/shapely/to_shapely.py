@@ -10,25 +10,30 @@ except ImportError as e:
     )
 
 
-def region_to_shapely(region: Region) -> sg.Polygon:
+def region_to_shapely(region: Region) -> sg.Polygon | sg.Point | sg.LineString:
     """
     Return the region as a shapeply polygon
     :return:
     """
+
     if region.type == RegionType.Ruler:
-        polygon = sg.LineString(region.getvertices())
+        geometry = sg.LineString(region.getvertices())
+    elif region.type == RegionType.Pin:
+        geometry = sg.Point(region.getvertices())
     else:
-        polygon = sg.Polygon(
+        geometry = sg.Polygon(
             region.getvertices(), [x.getvertices() for x in region.holes]
         )
-    return polygon
+    return geometry
 
 
-def layer_to_shapely(layer: Layer) -> sg.MultiPolygon:
+def layer_to_shapely(layer: Layer, fix_negative: bool = True) -> sg.MultiPolygon:
     """
     Return the layer as shaply multipolygon
 
     :return: A shapely multipolygon contain all the regions in this layer.
     """
-    polygons = [region_to_shapely(x) for x in layer.regions]
-    return sg.MultiPolygon(polygons)
+    if layer.contains_negative() and fix_negative:
+        layer.match_negative()
+    geometries = [region_to_shapely(x) for x in layer.regions]
+    return sg.GeometryCollection(geometries)

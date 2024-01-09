@@ -8,6 +8,8 @@ from datetime import datetime
 from lxml.etree import _Element, Element
 from pyhaloxml.pyhaloxml_rs import point_in_polygon
 
+from pyhaloxml import Layer
+
 
 def points_in_polygons(
     points: list[tuple[float, float]], polygons: list[list[tuple[float, float]]]
@@ -19,6 +21,8 @@ def points_in_polygons(
                 result[i] = j
                 continue
     return result
+
+
 
 
 class Comment:

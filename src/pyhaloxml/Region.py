@@ -6,8 +6,8 @@ import math
 from numbers import Real
 from lxml.etree import _Element, Element
 import geojson as gs
-from pyhaloxml.ellipse import ellipse2polygon
-from pyhaloxml.misc import RegionType, getvertices, closepolygon, getvertex, Comment
+from .ellipse import ellipse2polygon
+from .misc import RegionType, getvertices, closepolygon, getvertex, Comment
 
 
 class Region:
@@ -117,11 +117,17 @@ class Region:
         vertices = self.getvertices()
         if self.type == RegionType.Pin:
             geoj = gs.Point(vertices[0])
-        elif self.has_area():
-            polygon = [vertices]
+        elif self.type == RegionType.Ruler:
+            geoj = gs.LineString(vertices)
+        elif self.type in [
+            RegionType.Rectangle,
+            RegionType.Ellipse,
+            RegionType.Polygon,
+        ]:
+            polygon = [closepolygon(vertices)]
+            for v in self.holes:
+                polygon.append(closepolygon(v.getvertices()))
             geoj = gs.Polygon(polygon)
-            if not geoj.is_valid:
-                self.log.warning("Polygon is not valid!")
         elif self.type in [RegionType.Ruler, RegionType.Polygon]:
             geoj = gs.LineString(vertices)
         else:
