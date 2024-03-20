@@ -1,6 +1,7 @@
 """
 Test of inpoly.py
 """
+
 import pytest as pytest
 
 from pyhaloxml.misc import points_in_polygons

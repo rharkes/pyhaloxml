@@ -1,6 +1,7 @@
 """
 File with some basic classes and functions
 """
+
 import enum
 import logging
 import math
@@ -79,9 +80,7 @@ class Color:
 
     def setrgb(self, r: int, g: int, b: int) -> None:
         if all([x <= 255 for x in [r, g, b]]):
-            self.rgb = (r + g * 2**8 + b * 2**16).to_bytes(
-                length=3, byteorder="little"
-            )
+            self.rgb = (r + g * 2**8 + b * 2**16).to_bytes(length=3, byteorder="little")
             return
         self.log.error("Color should be <255 for each color")
 

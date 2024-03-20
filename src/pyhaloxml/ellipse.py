@@ -1,6 +1,7 @@
 """
 Scripts to generate a polygon from an ellipse
 """
+
 import math
 
 

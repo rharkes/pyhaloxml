@@ -1,6 +1,7 @@
 """
 HaloXML Class to import the xml files that are outputted by Halo.
 """
+
 import io
 import logging
 import os
