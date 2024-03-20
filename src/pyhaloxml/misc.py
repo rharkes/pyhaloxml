@@ -99,6 +99,7 @@ class RegionType(enum.IntEnum):
     * Ellipse  (x1, y1, x2, y2) corners of enclosing rectangle
     * Ruler (x1, y1, x2, y2)  start->end
     * Polygon (vertex elements)
+    * Pin  (x1, y1)
     """
 
     Unknown = -1

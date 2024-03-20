@@ -34,7 +34,6 @@ def region_to_shapely(
 def layer_to_shapely(layer: Layer, fix_negative: bool = True) -> sg.MultiPolygon:
     """
     Return the layer as shaply multipolygon
-
     :return: A shapely multipolygon contain all the regions in this layer.
     """
     if layer.contains_negative() and fix_negative:
