@@ -151,7 +151,7 @@ def region_from_coordinates(
     )
     vertices = Element("Vertices")
     for v in coords[0]:
-        vertices.append(Element("V", {"X": str(int(v[0])), "Y": str(int(v[1]))}))
+        vertices.append(Element("V", {"X": str(math.floor(v[0])), "Y": str(math.floor(v[1]))}))
     region.append(vertices)
     comments_e = Element("Comments")
     for c in comments:
@@ -164,7 +164,7 @@ def region_from_coordinates(
         )
         vertices = Element("Vertices")
         for v in coords[i]:
-            vertices.append(Element("V", {"X": str(int(v[0])), "Y": str(int(v[1]))}))
+            vertices.append(Element("V", {"X": str(math.floor(v[0])), "Y": str(math.floor(v[1]))}))
         region.append(vertices)
         reg.add_hole(Region(region))
     return reg
