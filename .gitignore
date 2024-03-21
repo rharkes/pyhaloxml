@@ -134,3 +134,6 @@ dmypy.json
 # Rust
 Cargo.lock
 .rustc_info.json
+
+# Testfile
+test.py

@@ -3,6 +3,7 @@ This example opens a datafile and saves it as a geojson.
 One of the polygons does not close. This happens with Halo .annotations files for some reason.
 The polygon is closed automatically and a warning is given.
 """
+
 from pathlib import Path
 from pyhaloxml import HaloXML
 

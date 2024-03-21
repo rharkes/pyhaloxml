@@ -1,22 +1,21 @@
 """
 HaloXML Class to import the xml files that are outputted by Halo.
 """
+
 import io
 import logging
 import os
 from contextlib import AbstractContextManager
 from pathlib import Path
 from types import TracebackType
-from typing import Union, Any, BinaryIO, Type, Optional
-from uuid import uuid4
+from typing import Union, Any, BinaryIO, Type, Optional, List
 
 from lxml import etree
-from lxml.etree import _ElementTree
+from lxml.etree import _ElementTree, _Element
 import geojson as gs
 
 from .Layer import Layer
 from .Region import Region
-from .misc import RegionType, points_in_polygons
 
 
 class HaloXMLFile(AbstractContextManager[Any]):
@@ -58,10 +57,10 @@ class HaloXML:
     """
 
     def __init__(self) -> None:
-        self.tree = etree.Element("root")  # type:_ElementTree
+        self.tree = etree.Element("root")  # type:_ElementTree | Any
         self.layers = []  # type: list[Layer]
         self.valid = False  # type: bool
-        self.log = logging.getLogger("HaloXML")
+        self.log = logging.getLogger(__name__)
 
     def __bool__(self) -> bool:
         return self.valid
@@ -73,40 +72,21 @@ class HaloXML:
         :return:
         """
         self.tree = etree.parse(fp)
-        annotations = self.tree.getroot().getchildren()
-        for annotation in annotations:  # go over each layer in the file
+        for (
+            annotation
+        ) in self.tree.getroot().iterchildren():  # go over each layer in the file
             layer = Layer()
             layer.fromattrib(annotation.attrib)
-            regions = annotation.getchildren()[0]
-            neg = []  # type: list[Region]
-            pos = []  # type: list[Region]
+            regionslist = [x for x in annotation.iterchildren()]
+            regions = regionslist[0]
             for region in regions:  # sort regions for positive ore negative
-                if region.attrib["NegativeROA"] == "1":
-                    neg.append(Region(region))
-                else:
-                    pos.append(Region(region))
-            # It is not clear what 'parent' a negative ROIs belongs to. Have to find it out ourselves...
-            logging.info(
-                f"Found {len(pos)} positive regions and {len(neg)} negative regions."
-            )
-            if neg:
-                neg_points = [n.getpointinregion() for n in neg]
-                pos_polygons = [p.getvertices() for p in pos]
-                pos_idxs = points_in_polygons(
-                    neg_points, pos_polygons
-                )  # locate the positive polygon that belongs to each negative polygon
-                for neg_idx, pos_idx in enumerate(
-                    pos_idxs
-                ):  # add the negative as hole to the apropriate positive
-                    pos[pos_idx].add_hole(neg[neg_idx])
-                for p in pos:
-                    layer.addregion(p)
-            else:
-                for r in pos:
-                    layer.addregion(r)
-
+                layer.addregion(Region(region))
             self.layers.append(layer)
         self.valid = True
+
+    def matchnegative(self) -> None:
+        for layer in self.layers:
+            layer.match_negative()
 
     def load(self, pth: Union[str, os.PathLike[Any]]) -> None:
         """
@@ -157,39 +137,11 @@ class HaloXML:
 
         :return: A geojson featurecollection with all the annotations.
         """
-        features = []
+        features = []  # type: List[gs.Feature]
         for layer in self.layers:
-            props = {
-                "objectType": "annotation",
-                "name": layer.name,
-                "classification": {
-                    "name": layer.name,
-                    "color": layer.linecolor.getrgb(),
-                },
-                "isLocked": False,
-            }
-            if len(layer.regions) == 1:
-                geometry = layer.regions[0].as_geojson()
-                features.append(
-                    gs.Feature(geometry=geometry, properties=props, id=str(uuid4()))
-                )
-            else:  # try to put them in a MultiPolygon
-                if any([x.type == RegionType.Ruler for x in layer.regions]):
-                    for region in layer.regions:
-                        features.append(
-                            gs.Feature(
-                                geometry=region.as_geojson(),
-                                properties=props,
-                                id=str(uuid4()),
-                            )
-                        )
-                else:
-                    geometry = gs.MultiPolygon(
-                        [x.as_geojson()["coordinates"] for x in layer.regions]
-                    )
-                    features.append(
-                        gs.Feature(geometry=geometry, properties=props, id=str(uuid4()))
-                    )
+            fts = layer.as_geojson()
+            for ft in fts:
+                features.append(ft)
 
         return gs.FeatureCollection(features)
 
