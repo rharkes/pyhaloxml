@@ -11,7 +11,7 @@ from types import TracebackType
 from typing import Union, Any, BinaryIO, Type, Optional, List
 
 from lxml import etree
-from lxml.etree import _ElementTree
+from lxml.etree import _ElementTree, _Element
 import geojson as gs
 
 from .Layer import Layer
@@ -57,7 +57,7 @@ class HaloXML:
     """
 
     def __init__(self) -> None:
-        self.tree = etree.Element("root")  # type:_ElementTree
+        self.tree = etree.Element("root")  # type:_ElementTree | Any
         self.layers = []  # type: list[Layer]
         self.valid = False  # type: bool
         self.log = logging.getLogger(__name__)
@@ -72,11 +72,13 @@ class HaloXML:
         :return:
         """
         self.tree = etree.parse(fp)
-        annotations = self.tree.getroot().getchildren()
-        for annotation in annotations:  # go over each layer in the file
+        for (
+            annotation
+        ) in self.tree.getroot().iterchildren():  # go over each layer in the file
             layer = Layer()
             layer.fromattrib(annotation.attrib)
-            regions = annotation.getchildren()[0]
+            regionslist = [x for x in annotation.iterchildren()]
+            regions = regionslist[0]
             for region in regions:  # sort regions for positive ore negative
                 layer.addregion(Region(region))
             self.layers.append(layer)

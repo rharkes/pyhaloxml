@@ -36,9 +36,9 @@ class Region:
             self.type = RegionType.Pin
         self.isnegative = region.attrib["NegativeROA"] == "1"  # type: bool
         self.hasendcaps = region.attrib["HasEndcaps"] == "1"  # type: bool
-        for e in region.getchildren():
+        for e in region.iterchildren():
             if e.tag == "Comments":
-                for c in e.getchildren():
+                for c in e.iterchildren():
                     newcomment = Comment()
                     newcomment.setcomment(c)
                     self.comments.append(newcomment)
@@ -157,7 +157,7 @@ def region_from_coordinates(
     region.append(vertices)
     comments_e = Element("Comments")
     for c in comments:
-        comments_e.apppend(c.getcomment())
+        comments_e.append(c.getcomment())
     region.append(comments_e)
     reg = Region(region)
     for i in range(1, len(coords)):

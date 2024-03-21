@@ -34,8 +34,8 @@ class Comment:
         return self._body
 
     def setcomment(self, e: _Element) -> None:
-        self._author = e.attrib["Author"]
-        self._body = e.attrib["Body"]
+        self._author = str(e.attrib["Author"])
+        self._body = str(e.attrib["Body"])
         self._createdtime = dateutil.parser.isoparse(e.attrib["CreatedTime"])
         self._modifiedtime = dateutil.parser.isoparse(e.attrib["ModifiedTime"])
 
@@ -113,17 +113,17 @@ class RegionType(enum.IntEnum):
 
 def getvertices(element: _Element) -> list[tuple[float, float]]:
     vertices = []
-    for e in element.getchildren():
+    for e in element.iterchildren():
         if e.tag == "Vertices":
-            for v in e.getchildren():
+            for v in e.iterchildren():
                 vertices.append((float(v.attrib["X"]), float(v.attrib["Y"])))
     return vertices
 
 
 def getvertex(element: _Element) -> tuple[float, float]:
-    for e in element.getchildren():
+    for e in element.iterchildren():
         if e.tag == "Vertices":
-            for v in e.getchildren():
+            for v in e.iterchildren():
                 return float(v.attrib["X"]), float(v.attrib["Y"])
     return math.nan, math.nan
 

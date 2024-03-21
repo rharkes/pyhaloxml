@@ -39,9 +39,9 @@ class Layer:
 
         :param annotationattribs: lxml attribute with information about the layer
         """
-        self.linecolor.setlinecolor(annotationattribs["LineColor"])
-        self.name = annotationattribs["Name"]
-        self.visible = annotationattribs["Visible"]
+        self.linecolor.setlinecolor(str(annotationattribs["LineColor"]))
+        self.name = str(annotationattribs["Name"])
+        self.visible = str(annotationattribs["Visible"])
 
     def fromdict(self, dinfo: dict[str, str]) -> None:
         """
