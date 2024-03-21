@@ -9,6 +9,7 @@ from pyhaloxml import HaloXML, Layer
 pth = Path(Path.cwd(), "exampledata", "example.annotations")
 hx = HaloXML()
 hx.load(pth)
+hx.matchnegative()
 # create two empty layers, here with the same names/properties as the original layers
 layer1 = Layer()
 layer2 = Layer()

@@ -13,6 +13,7 @@ with open(pth, "r") as f:
     geo_data = gs.load(f)
 
 hx = HaloXML()
+hx.matchnegative()
 for feature in geo_data["features"]:
     layer = Layer()
     if feature["geometry"]["type"] == "MultiPolygon":
@@ -34,4 +35,5 @@ hx.save(Path(pth.parent, "qupath_test"))
 # --- #
 hx = HaloXML()
 hx.load(Path(pth.parent, "qupath_test.annotations"))
+hx.matchnegative()
 hx.to_geojson(Path(pth.parent, "qupath_test_repl"))

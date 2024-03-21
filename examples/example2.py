@@ -11,6 +11,7 @@ pth = Path(Path.cwd(), "exampledata", "multiple_holes.annotations")
 # pth = Path(Path.cwd(), "exampledata", "example_holes.annotations")
 hx = HaloXML()
 hx.load(pth)
+hx.matchnegative()
 for layer in hx.layers:
     for i, region in enumerate(layer.regions):
         if len(region.holes) == 1:

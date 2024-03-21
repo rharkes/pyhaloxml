@@ -9,5 +9,6 @@ from pyhaloxml.shapely import layer_to_shapely
 pth = Path(Path.cwd(), "exampledata", "multiple_holes.annotations")
 hx = HaloXML()
 hx.load(pth)
+hx.matchnegative()
 sl = layer_to_shapely(hx.layers[0])
 print(f"{sl.wkt}")
