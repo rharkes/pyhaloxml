@@ -17,6 +17,9 @@ Python code to read/write .annotation files from Halo. Can export as .geojson fo
 ## Installation
 `pip install pyhaloxml`
 
+## Note on version 3
+The matching of negative to positive regions now needs to be done by the user after loading the data. The examples have been updated. This needed to happen because negative regions can be unmatched in Halo. This would cause errors when loading. 
+
 ## Loading speed
 Rust is used to match the negative regions to positive regions, thanks to [Wim Pomp](github.com/wimpomp/)!
 
