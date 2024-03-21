@@ -22,7 +22,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pip install pytest maturin lxml geojson shapely, python-dateutil
+          pip install pytest maturin lxml geojson shapely python-dateutil
           python -m venv venv
           . venv/bin/activate
           maturin develop
