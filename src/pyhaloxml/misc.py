@@ -6,10 +6,9 @@ import enum
 import logging
 import math
 from datetime import datetime
+import dateutil.parser
 from lxml.etree import _Element, Element
 from pyhaloxml.pyhaloxml_rs import point_in_polygon
-
-from pyhaloxml import Layer
 
 
 def points_in_polygons(
@@ -37,8 +36,8 @@ class Comment:
     def setcomment(self, e: _Element) -> None:
         self._author = e.attrib["Author"]
         self._body = e.attrib["Body"]
-        self._createdtime = datetime.fromisoformat(e.attrib["CreatedTime"])
-        self._modifiedtime = datetime.fromisoformat(e.attrib["ModifiedTime"])
+        self._createdtime = dateutil.parser.isoparse(e.attrib["CreatedTime"])
+        self._modifiedtime = dateutil.parser.isoparse(e.attrib["ModifiedTime"])
 
     def setbody(self, body: str) -> None:
         self._body = body
