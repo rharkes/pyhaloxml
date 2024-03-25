@@ -12,7 +12,7 @@ except ImportError as e:
 
 def region_to_shapely(
     region: Region,
-) -> tuple[sg.Polygon | sg.Point | sg.LineString, RegionType]:
+) -> sg.Polygon | sg.Point | sg.LineString:
     """
     Return the region as a shapeply polygon
     :return:
@@ -28,7 +28,7 @@ def region_to_shapely(
         )
         if not geometry.is_valid:
             geometry = sg.LineString(region.getvertices())
-    return geometry, region.type
+    return geometry
 
 
 def layer_to_shapely(layer: Layer, fix_negative: bool = True) -> sg.MultiPolygon:
@@ -40,6 +40,6 @@ def layer_to_shapely(layer: Layer, fix_negative: bool = True) -> sg.MultiPolygon
         layer.match_negative()
     geometries = []
     for x in layer.regions:
-        geom, _ = region_to_shapely(x)
+        geom = region_to_shapely(x)
         geometries.append(geom)
     return sg.GeometryCollection(geometries)
