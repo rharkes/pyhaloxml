@@ -8,7 +8,7 @@ import math
 from datetime import datetime
 import dateutil.parser
 from lxml.etree import _Element, Element
-from pyhaloxml.pyhaloxml_rs import point_in_polygon
+from pointinpoly import pointinpoly
 
 
 def points_in_polygons(

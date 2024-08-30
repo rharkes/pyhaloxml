@@ -1,6 +1,6 @@
 [build-system]
-requires = ["maturin>=0.14,<0.15"]
-build-backend = "maturin"
+build-backend = 'mesonpy'
+requires = ['meson-python']
 
 [project]
 name = "pyhaloxml"
@@ -23,7 +23,7 @@ requires-python = ">=3.10"
 
 [project.optional-dependencies]
 shapely = ["shapely >= 2.0"]
-dev = ["black", "bumpver", "pytest", "mypy", "setuptools", "build", "twine", "types-python-dateutil", "lxml-stubs"]
+dev = ["black", "bumpver", "pytest", "mypy", "types-python-dateutil", "lxml-stubs"]
 
 [project.urls]
 Homepage = "https://github.com/rharkes/pyhaloxml"
