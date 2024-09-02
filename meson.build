@@ -3,8 +3,8 @@ project('purelib-and-platlib', 'c')
 py = import('python').find_installation(pure: false)
 
 py.extension_module(
-    'pointinpoly',
-    'src/pointinpoly/pointinpoly.c',
+    'pyhaloxmlc',
+    'src/pyhaloxmlc/pyhaloxmlc.c',
     install: true,
 )
 
