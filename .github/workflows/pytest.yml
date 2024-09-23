@@ -11,10 +11,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Install Rust
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          toolchain: stable
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -24,6 +20,7 @@ jobs:
           pip install pytest lxml geojson shapely python-dateutil
           python -m venv venv
           . venv/bin/activate
+          pip install .
 
       - name: Test with pytest
         run: pytest
