@@ -1,7 +1,6 @@
 #include <Python.h>
 #include <stdbool.h>
-float min(float a, float b);
-float max(float a, float b);
+#include <stdlib.h>
 bool pointinpoly_c(PyObject* point, PyObject* polygon);
 
 static PyObject* pointinpoly(PyObject* self, PyObject *args)
@@ -81,11 +80,4 @@ bool pointinpoly_c(PyObject* point, PyObject* polygon) {
         p1y = p2y;
     }
     return inside;
-}
-
-float min(float a, float b){
-    return (a>b)?b:a;
-}
-float max(float a, float b){
-    return (a<b)?b:a;
 }
