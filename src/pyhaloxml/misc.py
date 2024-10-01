@@ -8,7 +8,7 @@ import math
 from datetime import datetime
 import dateutil.parser
 from lxml.etree import _Element, Element
-from pyhaloxml.pyhaloxml_rs import point_in_polygon
+from pyhaloxmlc import pointinpoly
 
 
 def points_in_polygons(
@@ -17,7 +17,7 @@ def points_in_polygons(
     result = [-1] * len(points)
     for i, point in enumerate(points):
         for j, polygon in enumerate(polygons):
-            if point_in_polygon(point, polygon):
+            if pointinpoly(point, polygon):
                 result[i] = j
                 continue
     return result
