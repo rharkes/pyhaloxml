@@ -18,7 +18,7 @@ def main():
         hx.load(file)
         start = time.time()
         hx.matchnegative()
-        timevec.append(time.time()-start)
+        timevec.append(time.time() - start)
     avg_duration = statistics.mean(timevec)
     print(f"Matching negative regions took {avg_duration * 1e3 :.2f} ms on average")
 
