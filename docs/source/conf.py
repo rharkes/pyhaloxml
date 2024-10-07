@@ -11,7 +11,7 @@ version = "3.1.2"
 # -- General configuration
 extensions = [
     "sphinx.ext.napoleon",
-    "sphinx.ext.numpydoc",
+    "numpydoc",
 ]
 napoleon_google_docstring = False
 napoleon_use_param = False
