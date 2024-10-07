@@ -1,6 +1,6 @@
 project('pyhaloxml',
   'c',
-  version: '3.1.0',
+  version: '3.1.1',
   license: 'GPL-3',
   meson_version: '>= 1.5.2',
   default_options: [
