@@ -1,7 +1,7 @@
 #include <Python.h>
 #include <stdbool.h>
-float min(float a, float b);
-float max(float a, float b);
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 bool pointinpoly_c(PyObject* point, PyObject* polygon);
 
 
@@ -66,9 +66,9 @@ bool pointinpoly_c(PyObject* point, PyObject* polygon) {
     for (int i = 1; i < nvertices; ++i){
         p2 = PyList_GetItem(polygon, i);
         PyArg_ParseTuple(p2, "ff", &p2x, &p2y);
-        if (pointy > min(p1y, p2y)) {
-            if (pointy <= max(p1y, p2y)) {
-                if (pointx <= max(p1x,p2x)){
+        if (pointy > MIN(p1y, p2y)) {
+            if (pointy <= MAX(p1y, p2y)) {
+                if (pointx <= MAX(p1x,p2x)){
                     if (p1y != p2y){
                         xints = (pointy - p1y) * (p2x - p1x) / (p2y - p1y) + p1x;
                     }
@@ -82,10 +82,4 @@ bool pointinpoly_c(PyObject* point, PyObject* polygon) {
         p1y = p2y;
     }
     return inside;
-}
-float min(float a, float b){
-    return (a>b)?b:a;
-}
-float max(float a, float b){
-    return (a<b)?b:a;
 }
