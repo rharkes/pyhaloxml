@@ -3,34 +3,21 @@ name: Wheels
 on: workflow_call
 
 jobs:
-  wheels_lint:
-    uses: ./.github/workflows/black.yml
-  wheels_mypy:
-    uses: ./.github/workflows/mypy.yml
-  wheels_pytest:
-    uses: ./.github/workflows/pytest.yml
-  wheels:
-    name: wheels
-    needs: [wheels_lint, wheels_mypy, wheels_pytest]
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        # macos-13 is an intel runner, macos-14 is apple silicon
+        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Build
-        run: |
-          python -m pip install cibuildwheel
-          python -m cibuildwheel
-      - name: Build source dist
-        run: |
-          python -m build . --sdist
+
+      - name: Build wheels
+        run: pipx run cibuildwheel
+
       - uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.os }}
-          path: ./dist
+          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl
