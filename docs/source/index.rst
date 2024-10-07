@@ -11,7 +11,7 @@ Region
 ------
 
 .. automodule::  pyhaloxml.Region
-    :members: region_from_coordinates
+    :members:
 
 
 Layer
