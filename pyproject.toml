@@ -23,7 +23,7 @@ requires-python = ">=3.10"
 
 [project.optional-dependencies]
 shapely = ["shapely >= 2.0"]
-dev = ["ruff", "bumpver", "pytest", "mypy", "docformatter", "isort", "types-python-dateutil", "lxml-stubs"]
+dev = ["ruff", "bumpver", "pytest", "mypy", "numpydoc", "isort", "types-python-dateutil", "lxml-stubs"]
 
 [project.urls]
 Homepage = "https://github.com/rharkes/pyhaloxml"
@@ -57,9 +57,18 @@ push = true
 line-length = 88
 indent-width = 4
 
-[tool.docformatter]
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 20
+
+[tool.numpydoc_validation]
 recursive = true
-style = "sphinx"
+checks = [
+    "all",
+    "EX01",
+    "SA01",
+    "ES01",
+]
 
 [tool.pytest.ini_options]
 pythonpath = [

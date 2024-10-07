@@ -1,4 +1,39 @@
-"""HaloXML Class to import the xml files that are outputted by Halo."""
+"""
+A package for parsing .annotations files from Halo.
+
+It can load .annotation files and store them as .geojson. These must be QuPath compatible.
+
+Examples
+--------
+```
+from pyhaloxml import (
+    HaloXML,
+)
+
+hx = HaloXML()
+hx.load(
+    "c:\\myanno.annotations"
+)
+hx.matchnegative()
+hx.to_geojson(
+    "c:\\myanno.geojson"
+)
+```
+
+```
+from pyhaloxml import (
+    HaloXMLFile,
+)
+
+with HaloXMLFile(
+    "c:\\myanno.annotations"
+) as hx:
+    hx.matchnegative()
+    hx.to_geojson(
+        "c:\\myanno.geojson"
+    )
+```
+"""
 
 import io
 import logging
@@ -17,9 +52,27 @@ from .Region import Region
 
 
 class HaloXMLFile(AbstractContextManager[Any]):
-    """Context manager for handeling .annotation files."""
+    """
+    Context manager for handeling .annotation files.
 
-    def __init__(self, pth: Union[str, os.PathLike[Any]], mode: str = "r") -> None:
+    Parameters
+    ----------
+    pth : str | os.PathLike[Any]
+        Path to the .annotations file.
+    mode : str
+        'r' = read (default).
+        'w' = write.
+
+    Attributes
+    ----------
+
+    Methods
+    -------
+    """
+
+    def __init__(
+        self, pth: Union[str, os.PathLike[Any]], mode: str = "r"
+    ) -> None:  # numpydoc ignore=GL08
         if mode not in ["r", "w"]:
             raise KeyError(f"Invalid mode: {mode}")
         pth = Path(pth)
@@ -28,7 +81,7 @@ class HaloXMLFile(AbstractContextManager[Any]):
         self.pth = pth
         self.mode = mode
 
-    def __enter__(self) -> "HaloXML":
+    def __enter__(self) -> "HaloXML":  # numpydoc ignore=GL08
         self.hx = HaloXML()
         if self.mode == "r":
             self.file = io.FileIO(self.pth, "r")
@@ -40,7 +93,7 @@ class HaloXMLFile(AbstractContextManager[Any]):
         exc_type: Optional[Type[BaseException]],
         exc_value: Optional[BaseException],
         traceback: Optional[TracebackType],
-    ) -> None:
+    ) -> None:  # numpydoc ignore=GL08
         if self.mode == "w":
             self.hx.save(self.pth)
         else:
@@ -48,22 +101,37 @@ class HaloXMLFile(AbstractContextManager[Any]):
 
 
 class HaloXML:
-    """The class to hold annotation data."""
+    """
+    HaloXML Class to import the xml files that are outputted by Halo.
 
-    def __init__(self) -> None:
+    Attributes
+    ----------
+    tree : _ElementTree
+        with the raw xml data
+    layers : list[Layer]
+        list with the layers that are present in this dataset
+    valid : bool
+        is the dataset valid
+    log : logger
+    """
+
+    def __init__(self) -> None:  # numpydoc ignore=GL08
         self.tree = etree.Element("root")  # type:_ElementTree | Any
         self.layers = []  # type: list[Layer]
         self.valid = False  # type: bool
         self.log = logging.getLogger(__name__)
 
-    def __bool__(self) -> bool:
+    def __bool__(self) -> bool:  # numpydoc ignore=GL08
         return self.valid
 
     def loadstream(self, fp: BinaryIO) -> None:
         """
+        Load the annotation from a BinaryIO stream.
 
-        :param fp:
-        :return:
+        Parameters
+        ----------
+        fp : BinaryIO
+            Pointer to a BinaryIO.
         """
         self.tree = etree.parse(fp)
         for (
@@ -79,15 +147,20 @@ class HaloXML:
         self.valid = True
 
     def matchnegative(self) -> None:
-        """Match the negative regions in all layers to their positive
-        region."""
+        """
+        Match the negative regions in all layers to their positive region.
+        """
         for layer in self.layers:
             layer.match_negative()
 
     def load(self, pth: Union[str, os.PathLike[Any]]) -> None:
-        """Load .annotations file.
+        """
+        Load .annotations file from a path.
 
-        :param pth: path to the .annotations file
+        Parameters
+        ----------
+        pth : str | os.PathLike[Any]
+            Path to the .annotations file to load.
         """
         pth = Path(pth)
         if not pth.exists() or not pth.is_file():
@@ -97,9 +170,13 @@ class HaloXML:
         logging.info(f"Finished loading {pth.stem}")
 
     def save(self, pth: Union[str, os.PathLike[Any]]) -> None:
-        """Save the data as .annotation file.
+        """
+        Save the data as .annotation file.
 
-        :param pth: Location to save the annotations to
+        Parameters
+        ----------
+        pth : str | os.PathLike[Any]
+            Path to the .annotations file to save.
         """
         pth = Path(pth)
         if not pth.suffix:
@@ -108,9 +185,13 @@ class HaloXML:
             f.write(self.as_raw())
 
     def as_raw(self) -> bytes:
-        """Return the bytes that can be written to a .annotations files.
+        """
+        Return the bytes that can be written to a .annotations files.
 
-        :return: bytes represention of the data in this HaloXML.
+        Returns
+        -------
+        bytes
+            Bytes represention of the data in this HaloXML.
         """
         new_root = etree.Element("Annotations")
         for layer in self.layers:
@@ -125,9 +206,13 @@ class HaloXML:
         return bytes(etree.tostring(new_root))
 
     def as_geojson(self) -> gs.FeatureCollection:
-        """Returns the annotations as geojson.FeatureCollection.
+        """
+        Return the annotations as geojson.FeatureCollection.
 
-        :return: A geojson featurecollection with all the annotations.
+        Returns
+        -------
+        FeatureCollection
+            A GeoJSON FeatureCollection containing the information of the .annotations file.
         """
         features = []  # type: list[gs.Feature]
         for layer in self.layers:
@@ -138,9 +223,13 @@ class HaloXML:
         return gs.FeatureCollection(features)
 
     def to_geojson(self, pth: Union[str, os.PathLike[Any]]) -> None:
-        """Save regions as geojson. This file can be loaded in QuPath.
+        """
+        Save regions as geojson. This file can be loaded in QuPath.
 
-        :param pth: Location to save the .geojson to.
+        Parameters
+        ----------
+        pth : str | os.PathLike[Any]
+            Path to the .GeoJSON file to save.
         """
         pth = Path(pth)
         if not pth.suffix:
