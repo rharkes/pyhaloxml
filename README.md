@@ -1,5 +1,5 @@
 [![Mypy](https://github.com/rharkes/pyhaloxml/actions/workflows/mypy.yml/badge.svg)](https://github.com/rharkes/pyhaloxml/actions/workflows/mypy.yml)
-[![Black](https://github.com/rharkes/pyhaloxml/actions/workflows/black.yml/badge.svg)](https://github.com/rharkes/pyhaloxml/actions/workflows/black.yml)
+[![Ruff](https://github.com/rharkes/pyhaloxml/actions/workflows/ruff.yml/badge.svg)](https://github.com/rharkes/pyhaloxml/actions/workflows/ruff.yml)
 [![Pytest](https://github.com/rharkes/pyhaloxml/actions/workflows/pytest.yml/badge.svg)](https://github.com/rharkes/pyhaloxml/actions/workflows/pytest.yml)
 [![Docs](https://readthedocs.org/projects/pyhaloxml/badge/?version=latest&style=flat)](https://readthedocs.org/projects/pyhaloxml)
 # PyHaloXML

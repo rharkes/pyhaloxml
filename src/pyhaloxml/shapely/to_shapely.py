@@ -4,7 +4,7 @@ from ..misc import RegionType
 
 try:
     import shapely.geometry as sg
-except ImportError as e:
+except ImportError:
     raise ImportError(
         "Shapely is not installed. Cannot use the shapely converters of haloxml."
     )

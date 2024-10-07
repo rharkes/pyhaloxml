@@ -1,6 +1,6 @@
 import pytest as pytest
 from pathlib import Path
-from pyhaloxml import HaloXML, RegionType
+from pyhaloxml import HaloXML
 
 
 @pytest.fixture

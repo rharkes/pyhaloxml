@@ -23,10 +23,5 @@ def main():
     print(f"Matching negative regions took {avg_duration * 1e3 :.2f} ms on average")
 
 
-def loadfile(file):
-
-    hx.matchnegative()
-
-
 if __name__ == "__main__":
     main()

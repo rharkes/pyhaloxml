@@ -50,11 +50,12 @@ def test_geojson(file):
 
 def test_shapely(file, jsonfile):
     from pyhaloxml.shapely import layer_to_shapely
-    import json
 
-    with open(jsonfile, "r") as fp:
-        datainfo = json.load(fp)
-    pixelsize = datainfo["micronsperpixel"]
+    # import json
+    #
+    # with open(jsonfile, "r") as fp:
+    #     datainfo = json.load(fp)
+    # pixelsize = datainfo["micronsperpixel"]
     hx = HaloXML()
     hx.load(file)
     shapely_res = layer_to_shapely(hx.layers[0])

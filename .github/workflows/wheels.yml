@@ -4,7 +4,7 @@ on: workflow_call
 
 jobs:
   wheels_lint:
-    uses: ./.github/workflows/black.yml
+    uses: ./.github/workflows/ruff.yml
   wheels_mypy:
     uses: ./.github/workflows/mypy.yml
   wheels_pytest:

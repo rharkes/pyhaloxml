@@ -8,11 +8,11 @@ import os
 from contextlib import AbstractContextManager
 from pathlib import Path
 from types import TracebackType
-from typing import Union, Any, BinaryIO, Type, Optional, List
+from typing import Union, Any, BinaryIO, Type, Optional
 
 from lxml import etree
-from lxml.etree import _ElementTree, _Element
 import geojson as gs
+from lxml.etree import _ElementTree  # noqa
 
 from .Layer import Layer
 from .Region import Region
@@ -140,7 +140,7 @@ class HaloXML:
 
         :return: A geojson featurecollection with all the annotations.
         """
-        features = []  # type: List[gs.Feature]
+        features = []  # type: list[gs.Feature]
         for layer in self.layers:
             fts = layer.as_geojson()
             for ft in fts:
