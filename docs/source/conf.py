@@ -20,7 +20,7 @@ intersphinx_mapping = {
 'numpydoc': ('https://numpydoc.readthedocs.io/en/latest', None),
 }
 
-autosummary_generate = True
+autosummary_generate = False
 autosummary_imported_members = True
 
 templates_path = ["_templates"]
