@@ -6,6 +6,7 @@ It can load .annotation files and store them as .geojson. The geojson will be Qu
 Examples
 --------
 Converting an annotations file to geojson:
+
 >>> from pyhaloxml import HaloXML
 >>> hx = HaloXML()
 >>> hx.load(r'c:\test.annotations')
@@ -13,6 +14,7 @@ Converting an annotations file to geojson:
 >>> hx.to_geojson(r'c:\test.geojson')
 
 Using the contextmanager to do the same thing:
+
 >>> from pyhaloxml import HaloXMLFile
 >>> with HaloXML(r'c:\test.annotations') as hx:
 >>>     hx.matchnegative()
