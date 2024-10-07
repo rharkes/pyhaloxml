@@ -18,8 +18,8 @@ extensions = [
 intersphinx_mapping = {
 'python': ('https://docs.python.org/3', None),
 'numpydoc': ('https://numpydoc.readthedocs.io/en/latest', None),
-'geojson': ('https://geojson.readthedocs.io/en/latest/', None),
-'lxml': ('https://lxml.readthedocs.io/en/latest/', None),
+'geojson': ('https://geojson.readthedocs.io/en/latest', None),
+'lxml': ('https://lxml.readthedocs.io/en/latest', None),
 }
 
 autosummary_generate = False
