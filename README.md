@@ -25,7 +25,14 @@ The matching of negative to positive regions now needs to be done by the user af
 
 ## Development
 * Clone the repository
-* `pip install --no-build-isolation --editable .`
+* `pip install --no-build-isolation --editable .[dev]`
+* These tools are used in this project:
+  * ruff : Code formatting and linting
+  * bumpver : Automatic versioning
+  * pytest : Testing
+  * mypy : Type checking
+  * numpydoc : Checking docstring style
+  * isort : Sorting imports
 
 ### Notes on development
 * The xml is relatively simple. There are Annotations and an annotation contains regions.
