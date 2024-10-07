@@ -58,11 +58,9 @@ line-length = 88
 indent-width = 4
 
 [tool.ruff.format]
-docstring-code-format = true
-docstring-code-line-length = 20
+docstring-code-format = false
 
 [tool.numpydoc_validation]
-recursive = true
 checks = [
     "all",
     "EX01",

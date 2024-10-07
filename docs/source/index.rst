@@ -1,16 +1,22 @@
 Welcome to pyhaloxml's documentation!
 =====================================
 
-**pyhaloxml** is a Python library for reading and writing .annotation files from Halo.
+HaloXML
+-------
 
-.. note::
+.. automodule::  pyhaloxml.HaloXML
+    :members:
 
-   This project is under active development.
+Region
+------
 
-Contents
---------
+.. automodule::  pyhaloxml.Region
+    :members: region_from_coordinates
 
-.. toctree::
 
-   usage
-   api
+Layer
+-----
+
+.. automodule::  pyhaloxml.Layer
+    :members:
+

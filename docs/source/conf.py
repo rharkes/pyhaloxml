@@ -2,7 +2,7 @@
 
 # -- Project information
 project = "pyhaloxml"
-copyright = "2023, R.Harkes"
+copyright = "2024, R.Harkes"
 author = "R.Harkes"
 
 release = "3.1.2"
