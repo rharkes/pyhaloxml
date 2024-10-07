@@ -10,11 +10,14 @@ version = "3.1.2"
 
 # -- General configuration
 extensions = [
-    "sphinx.ext.napoleon",
+    'sphinx.ext.autodoc',
+    'numpydoc',
+    'sphinx.ext.intersphinx',
 ]
-napoleon_google_docstring = False
-napoleon_use_param = False
-napoleon_use_ivar = True
+intersphinx_mapping = {
+'python': ('https://docs.python.org/3', None),
+'numpydoc': ('https://numpydoc.readthedocs.io/en/latest', None),
+}
 
 templates_path = ["_templates"]
 
