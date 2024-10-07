@@ -25,8 +25,8 @@ jobs:
           python-version: "3.12"
       - name: Build
         run: |
-          pip install build
-          python -m build .
+          python -m pip install cibuildwheel
+          python -m cibuildwheel
       - name: Build source dist
         run: |
           python -m build . --sdist
