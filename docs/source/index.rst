@@ -5,13 +5,13 @@ HaloXML
 -------
 
 .. automodule::  pyhaloxml.HaloXML
-    :members: HaloXML
+    :members: HaloXML, HaloXMLFile
 
 Region
 ------
 
 .. automodule::  pyhaloxml.Region
-    :members: Region
+    :members: Region, region_from_coordinates
 
 
 Layer
