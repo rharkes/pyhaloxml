@@ -16,8 +16,8 @@ class Layer:
     """
     Halo annotations are grouped in layers.
 
-    Parameters
-    ----------
+    These layers are the first buildingblock of a halo annotation.
+    They have properties like color and name and contain the regions.
 
     Attributes
     ----------

@@ -67,6 +67,9 @@ class HaloXML:
     """
     HaloXML Class to import the xml files that are outputted by Halo.
 
+    This class can contain also be used to combine multiple annotation files.
+    It would accumulate all layers and regions to a single annotation file.
+
     Attributes
     ----------
     tree : _ElementTree
