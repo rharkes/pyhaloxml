@@ -5,34 +5,7 @@ It can load .annotation files and store them as .geojson. These must be QuPath c
 
 Examples
 --------
-```
-from pyhaloxml import (
-    HaloXML,
-)
 
-hx = HaloXML()
-hx.load(
-    "c:\\myanno.annotations"
-)
-hx.matchnegative()
-hx.to_geojson(
-    "c:\\myanno.geojson"
-)
-```
-
-```
-from pyhaloxml import (
-    HaloXMLFile,
-)
-
-with HaloXMLFile(
-    "c:\\myanno.annotations"
-) as hx:
-    hx.matchnegative()
-    hx.to_geojson(
-        "c:\\myanno.geojson"
-    )
-```
 """
 
 import io
