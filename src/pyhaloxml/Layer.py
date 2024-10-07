@@ -109,7 +109,7 @@ class Layer:
 
     def match_negative(self) -> None:
         """
-        Match the negative regions in this layer to the positive region and remove the negative regions. 
+        Match the negative regions in this layer to the positive region and remove the negative regions.
         If a region is not matched the there is a warning via the logging framework.
         """
         neg_points = []
