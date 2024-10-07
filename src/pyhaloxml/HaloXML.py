@@ -1,7 +1,7 @@
 """
 A package for parsing .annotations files from Halo.
 
-It can load .annotation files and store them as .geojson. These must be QuPath compatible.
+It can load .annotation files and store them as .geojson. The geojson will be QuPath compatible.
 
 Examples
 --------
