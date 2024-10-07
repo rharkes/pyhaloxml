@@ -85,6 +85,9 @@ class HaloXML:
         self.valid = True
 
     def matchnegative(self) -> None:
+        """
+        Match the negative regions in all layers to their positive region
+        """
         for layer in self.layers:
             layer.match_negative()
 
