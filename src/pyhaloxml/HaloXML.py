@@ -172,7 +172,7 @@ class HaloXML:
 
     def as_raw(self) -> bytes:
         """
-        Return the bytes that can be written to a .annotations files.
+        Return the bytes that can be written to a .annotations file.
 
         Returns
         -------
