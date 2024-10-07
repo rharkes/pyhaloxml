@@ -1,1 +1,2 @@
 shapely
+sphinx-rtd-theme
