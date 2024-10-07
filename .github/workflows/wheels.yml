@@ -30,6 +30,7 @@ jobs:
 
   build_sdist:
     name: Build source distribution
+    needs: [wheels_lint, wheels_mypy, wheels_pytest]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
