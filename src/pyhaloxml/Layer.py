@@ -16,6 +16,9 @@ class Layer:
     """
     Halo annotations are grouped in layers.
 
+    Parameters
+    ----------
+
     Attributes
     ----------
     linecolor : Color
