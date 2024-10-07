@@ -1,9 +1,7 @@
-"""
-Anonymize filenames
-"""
+"""Anonymize filenames."""
 
-from pathlib import Path
 import uuid
+from pathlib import Path
 
 pth = Path(Path.cwd(), "tests", "testdata", "biganno")
 files = [x for x in pth.glob("*.annotations")]

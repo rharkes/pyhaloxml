@@ -1,6 +1,6 @@
 from ..Layer import Layer
-from ..Region import Region
 from ..misc import RegionType
+from ..Region import Region
 
 try:
     import shapely.geometry as sg
@@ -13,10 +13,7 @@ except ImportError:
 def region_to_shapely(
     region: Region,
 ) -> sg.Polygon | sg.Point | sg.LineString:
-    """
-    Return the region as a shapeply polygon
-    :return:
-    """
+    """Return the region as a shapeply polygon :return:"""
 
     if region.type == RegionType.Ruler:
         geometry = sg.LineString(region.getvertices())
@@ -32,10 +29,8 @@ def region_to_shapely(
 
 
 def layer_to_shapely(layer: Layer, fix_negative: bool = True) -> sg.MultiPolygon:
-    """
-    Return the layer as shaply multipolygon
-    :return: A shapely multipolygon contain all the regions in this layer.
-    """
+    """Return the layer as shaply multipolygon :return: A shapely multipolygon
+    contain all the regions in this layer."""
     if layer.contains_negative() and fix_negative:
         layer.match_negative()
     geometries = []

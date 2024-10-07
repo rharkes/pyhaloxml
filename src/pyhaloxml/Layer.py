@@ -1,20 +1,21 @@
-"""
-Layer.py
-"""
+"""Layer.py."""
 
 import json
 import logging
 from typing import List
 from uuid import uuid4
+
 import geojson as gs
 from lxml.etree import _Attrib
-from .Region import Region
+
 from .misc import Color, points_in_polygons
+from .Region import Region
 
 
 class Layer:
-    """
-    Halo annotations are grouped in layers. They have a LineColor, Name and Visibility
+    """Halo annotations are grouped in layers.
+
+    They have a LineColor, Name and Visibility
     """
 
     def __init__(self) -> None:
@@ -28,24 +29,21 @@ class Layer:
         return self.tojson()
 
     def contains_negative(self) -> bool:
-        """
-        Are there any negative regions in the layer
-        """
+        """Are there any negative regions in the layer."""
         return any([x.isnegative for x in self.regions])
 
     def fromattrib(self, annotationattribs: _Attrib) -> None:
-        """
-        Populate the layer with information from an lxml attribute.
+        """Populate the layer with information from an lxml attribute.
 
-        :param annotationattribs: lxml attribute with information about the layer
+        :param annotationattribs: lxml attribute with information about
+            the layer
         """
         self.linecolor.setlinecolor(str(annotationattribs["LineColor"]))
         self.name = str(annotationattribs["Name"])
         self.visible = str(annotationattribs["Visible"])
 
     def fromdict(self, dinfo: dict[str, str]) -> None:
-        """
-        Populate the layer with information from a dictionary
+        """Populate the layer with information from a dictionary.
 
         :param dinfo: dictionary with LineColor, Name and Visibility
         """
@@ -54,16 +52,15 @@ class Layer:
         self.visible = dinfo["Visible"]
 
     def tojson(self) -> str:
-        """
-        JSON representation of the layer
+        """JSON representation of the layer.
 
         :return: A jsonstring representation of this layer
         """
         return json.dumps(self.todict(), sort_keys=True)
 
     def todict(self) -> dict[str, str]:
-        """
-        Dictonary representation of the layer.
+        """Dictonary representation of the layer.
+
         :return:
         """
         return {
@@ -73,9 +70,7 @@ class Layer:
         }
 
     def as_geojson(self, matchnegative: bool = True) -> List[gs.Feature]:
-        """
-        A geojson representation of all regions in this layer
-        """
+        """A geojson representation of all regions in this layer."""
         if self.contains_negative() & matchnegative:
             self.log.warning(
                 "Layer contains negative regions! Please match before converting to geojson, or set matchnegative to False"
@@ -100,17 +95,18 @@ class Layer:
         return features
 
     def addregion(self, region: Region) -> None:
-        """
-        Add a region to this layer
+        """Add a region to this layer.
 
         :param region:
         """
         self.regions.append(region)
 
     def match_negative(self) -> None:
-        """
-        Match the negative regions in this layer to the positive region and remove the negative regions.
-        If a region is not matched the there is a warning via the logging framework.
+        """Match the negative regions in this layer to the positive region and
+        remove the negative regions.
+
+        If a region is not matched the there is a warning via the
+        logging framework.
         """
         neg_points = []
         pos_map = []  # type: list[int]  # index to original

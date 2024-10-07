@@ -1,5 +1,7 @@
-import pytest as pytest
 from pathlib import Path
+
+import pytest as pytest
+
 from pyhaloxml import HaloXML
 
 

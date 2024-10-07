@@ -1,6 +1,4 @@
-"""
-Test of inpoly.py
-"""
+"""Test of inpoly.py."""
 
 import pytest as pytest
 

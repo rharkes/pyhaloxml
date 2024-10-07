@@ -1,6 +1,4 @@
-"""
-HaloXML Class to import the xml files that are outputted by Halo.
-"""
+"""HaloXML Class to import the xml files that are outputted by Halo."""
 
 import io
 import logging
@@ -8,10 +6,10 @@ import os
 from contextlib import AbstractContextManager
 from pathlib import Path
 from types import TracebackType
-from typing import Union, Any, BinaryIO, Type, Optional
+from typing import Any, BinaryIO, Optional, Type, Union
 
-from lxml import etree
 import geojson as gs
+from lxml import etree
 from lxml.etree import _ElementTree  # noqa
 
 from .Layer import Layer
@@ -19,9 +17,7 @@ from .Region import Region
 
 
 class HaloXMLFile(AbstractContextManager[Any]):
-    """
-    Context manager for handeling .annotation files
-    """
+    """Context manager for handeling .annotation files."""
 
     def __init__(self, pth: Union[str, os.PathLike[Any]], mode: str = "r") -> None:
         if mode not in ["r", "w"]:
@@ -52,9 +48,7 @@ class HaloXMLFile(AbstractContextManager[Any]):
 
 
 class HaloXML:
-    """
-    The class to hold annotation data.
-    """
+    """The class to hold annotation data."""
 
     def __init__(self) -> None:
         self.tree = etree.Element("root")  # type:_ElementTree | Any
@@ -85,15 +79,13 @@ class HaloXML:
         self.valid = True
 
     def matchnegative(self) -> None:
-        """
-        Match the negative regions in all layers to their positive region
-        """
+        """Match the negative regions in all layers to their positive
+        region."""
         for layer in self.layers:
             layer.match_negative()
 
     def load(self, pth: Union[str, os.PathLike[Any]]) -> None:
-        """
-        Load .annotations file
+        """Load .annotations file.
 
         :param pth: path to the .annotations file
         """
@@ -105,8 +97,7 @@ class HaloXML:
         logging.info(f"Finished loading {pth.stem}")
 
     def save(self, pth: Union[str, os.PathLike[Any]]) -> None:
-        """
-        Save the data as .annotation file.
+        """Save the data as .annotation file.
 
         :param pth: Location to save the annotations to
         """
@@ -117,8 +108,7 @@ class HaloXML:
             f.write(self.as_raw())
 
     def as_raw(self) -> bytes:
-        """
-        Return the bytes that can be written to a .annotations files.
+        """Return the bytes that can be written to a .annotations files.
 
         :return: bytes represention of the data in this HaloXML.
         """
@@ -135,8 +125,7 @@ class HaloXML:
         return bytes(etree.tostring(new_root))
 
     def as_geojson(self) -> gs.FeatureCollection:
-        """
-        Returns the annotations as geojson.FeatureCollection
+        """Returns the annotations as geojson.FeatureCollection.
 
         :return: A geojson featurecollection with all the annotations.
         """
@@ -149,8 +138,7 @@ class HaloXML:
         return gs.FeatureCollection(features)
 
     def to_geojson(self, pth: Union[str, os.PathLike[Any]]) -> None:
-        """
-        Save regions as geojson. This file can be loaded in QuPath.
+        """Save regions as geojson. This file can be loaded in QuPath.
 
         :param pth: Location to save the .geojson to.
         """

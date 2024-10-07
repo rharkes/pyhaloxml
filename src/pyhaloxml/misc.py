@@ -1,13 +1,13 @@
-"""
-File with some basic classes and functions
-"""
+"""File with some basic classes and functions."""
 
 import enum
 import logging
 import math
 from datetime import datetime
+
 import dateutil.parser
-from lxml.etree import _Element, Element
+from lxml.etree import Element, _Element
+
 from pyhaloxmlc import pointinpoly
 
 
@@ -63,9 +63,7 @@ class Comment:
 
 
 class Color:
-    """
-    Class for keeping color rgb information
-    """
+    """Class for keeping color rgb information."""
 
     def __init__(self) -> None:
         self.rgb = (0).to_bytes(length=3, byteorder="little")  # type:bytes
@@ -91,8 +89,8 @@ class Color:
 
 
 class RegionType(enum.IntEnum):
-    """
-    Region, can be of type:
+    """Region, can be of type:
+
     * Rectangle  (x1, y1, x2, y2)  corners
     * Ellipse  (x1, y1, x2, y2) corners of enclosing rectangle
     * Ruler (x1, y1, x2, y2)  start->end

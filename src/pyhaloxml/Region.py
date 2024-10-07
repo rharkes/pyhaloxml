@@ -1,21 +1,21 @@
-"""
-Region.py
-"""
+"""Region.py."""
 
 import logging
 import math
 from numbers import Real
-from lxml.etree import _Element, Element
+
 import geojson as gs
+from lxml.etree import Element, _Element
+
 from .ellipse import ellipse2polygon
-from .misc import RegionType, getvertices, closepolygon, getvertex, Comment
+from .misc import Comment, RegionType, closepolygon, getvertex, getvertices
 
 
 class Region:
-    """
-    Halo region.
-    Can contian negative Regions with the same layer.
-    Has a variable called region that contains the original element from the pyhaloxml.
+    """Halo region.
+
+    Can contian negative Regions with the same layer. Has a variable
+    called region that contains the original element from the pyhaloxml.
     """
 
     def __init__(self, region: _Element) -> None:
@@ -56,19 +56,14 @@ class Region:
         return False
 
     def getvertices(self) -> list[tuple[float, float]]:
-        """
-        Get the vertices of the region
-        :return: the vertices element
-        """
+        """Get the vertices of the region :return: the vertices element."""
         if len(self.vertices) == 1:
             if self.vertices[0] == (math.nan, math.nan):
                 self._getvertices()
         return self.vertices
 
     def _getvertices(self) -> None:
-        """
-        Get the vertices of the region and store in class
-        """
+        """Get the vertices of the region and store in class."""
         vertices = [(math.nan, math.nan)]
         if self.type == RegionType.Polygon:
             vertices = getvertices(self.region)
@@ -96,8 +91,9 @@ class Region:
         self.vertices = vertices
 
     def getpointinregion(self) -> tuple[float, float]:
-        """
-        Returns a point in the region or on the edge of the region or on the line of a linestring or the point.
+        """Returns a point in the region or on the edge of the region or on the
+        line of a linestring or the point.
+
         Do check if the region `.has_area()` if you need to.
         :return:
         """
@@ -111,10 +107,7 @@ class Region:
         return pointinregion
 
     def as_geojson(self) -> gs.Polygon | gs.LineString | gs.Point:
-        """
-        Return the region as geojson.Polygon
-        :return:
-        """
+        """Return the region as geojson.Polygon :return:"""
         vertices = self.getvertices()
         if self.type == RegionType.Pin:
             geoj = gs.Point(vertices[0])
@@ -139,11 +132,12 @@ class Region:
 def region_from_coordinates(
     coords: list[list[tuple[Real, Real]]], comments: list[Comment] = []
 ) -> Region:
-    """
-    Creates a HaloXML Region from coordinates. It must be a list of lists of coordinates.
-    The first list is the outer polygon, the next lists are the polygonal holes and must be contained in the first polygon.
-    :param coords:
-    :param comments
+    """Creates a HaloXML Region from coordinates.
+
+    It must be a list of lists of coordinates. The first list is the
+    outer polygon, the next lists are the polygonal holes and must be
+    contained in the first polygon.
+    :param coords: :param comments
     :return:
     """
     region = Element(

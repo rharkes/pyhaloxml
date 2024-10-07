@@ -1,7 +1,8 @@
-from pathlib import Path
-from pyhaloxml import HaloXML
-import time
 import statistics
+import time
+from pathlib import Path
+
+from pyhaloxml import HaloXML
 
 
 def main():

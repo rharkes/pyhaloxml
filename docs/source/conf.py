@@ -10,18 +10,11 @@ version = "3.1.2"
 
 # -- General configuration
 extensions = [
-    "sphinx.ext.duration",
-    "sphinx.ext.doctest",
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
-    "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
 ]
-
-intersphinx_mapping = {
-    "python": ("https://docs.python.org/3/", None),
-    "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
-}
-intersphinx_disabled_domains = ["std"]
+napoleon_google_docstring = False
+napoleon_use_param = False
+napoleon_use_ivar = True
 
 templates_path = ["_templates"]
 

@@ -1,11 +1,14 @@
-"""
-Not recommended in any way! Going from GeoJSON to .annotation is a step in the wrong direction.
+"""Not recommended in any way!
+
+Going from GeoJSON to .annotation is a step in the wrong direction.
 """
 
 from pathlib import Path
-from pyhaloxml.Region import region_from_coordinates
-from pyhaloxml import Layer, HaloXML
+
 import geojson as gs
+
+from pyhaloxml import HaloXML, Layer
+from pyhaloxml.Region import region_from_coordinates
 
 pth = Path(Path.cwd(), "exampledata", "qupath_test.geojson")
 
