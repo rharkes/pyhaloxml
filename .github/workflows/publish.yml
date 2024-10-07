@@ -8,13 +8,14 @@ jobs:
   publish:
     name: publish
     needs: publish_wheels
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    environment: pypi
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          pattern: dist-*
-          path: ./dist
+          # unpacks all pyhaloxml artifacts into dist/
+          pattern: pyhaloxml-*
+          path: dist
           merge-multiple: true
       - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
