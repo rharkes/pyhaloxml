@@ -34,6 +34,13 @@ The matching of negative to positive regions now needs to be done by the user af
   * numpydoc : Checking docstring style
   * isort : Sorting imports
 
+### On Linux
+* install ninja and mesonpy to build
+  * `pip install meson-python ninja`
+* make sure pkgconfig and python-dev are installed:
+  * `sudo apt-get install pkg-config`
+  * `sudo apt-get install python3-dev`
+
 ### Notes on development
 * The xml is relatively simple. There are Annotations and an annotation contains regions.
 * Regions can be either positive or negative. However regions in an annotation are not hierarchical. So there is no telling what negative region should go with what positive region.
